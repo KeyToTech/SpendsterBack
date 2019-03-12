@@ -76,9 +76,3 @@ server.pid
 .idea/play2_settings.xml
 .idea/sbt.xml
 .idea/workspace.xml
-app/
-build.sbt
-conf/
-project/build.properties
-project/plugins.sbt
-public/
