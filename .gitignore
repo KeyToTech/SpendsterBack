@@ -76,3 +76,4 @@ server.pid
 .idea/play2_settings.xml
 .idea/sbt.xml
 .idea/workspace.xml
+.idea/uiDesigner.xml
