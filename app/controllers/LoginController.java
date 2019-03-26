@@ -11,7 +11,7 @@ public class LoginController extends Controller{
 
     public Result LoginPage(){
 
-        return ok(views.html.login.render());
+        return ok(views.html.login.apply());
     }
 
 }
