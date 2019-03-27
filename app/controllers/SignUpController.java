@@ -5,10 +5,6 @@ import play.mvc.Result;
 
 public class SignUpController extends Controller {
 
-    public SignUpController(){
-
-    }
-
 
     public Result SignUpPage(){
 

@@ -12,8 +12,13 @@ public class User {
     private Date CreatedDate;
 
 
-    public User(){
-        balance=0;
+    public User(int id,String username,String email,String password,double balance,Date createdDate){
+        setId(id);
+        setUsername(username);
+        setEmail(email);
+        setPassword(password);
+        setBalance(balance);
+        setCreatedDate(createdDate);
     }
 
     public void setId(int id){

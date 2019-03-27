@@ -4,5 +4,5 @@ import data.entity.User;
 
 public interface SignUpModel {
 
-    User getUser();
+    User createUser(String email,String password);
 }
