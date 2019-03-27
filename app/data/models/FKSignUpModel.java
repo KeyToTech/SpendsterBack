@@ -1,4 +1,13 @@
 package data.models;
 
-public class FKSignUpModel {
+import data.entity.User;
+
+public class FKSignUpModel implements  SignUpModel {
+
+    @Override
+    public User getUser() {
+        return new User();
+    }
+
+
 }
