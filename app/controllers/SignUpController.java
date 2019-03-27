@@ -7,7 +7,6 @@ public class SignUpController extends Controller {
 
 
     public Result SignUpPage(){
-
         return ok(views.html.signUp.apply());
     }
 

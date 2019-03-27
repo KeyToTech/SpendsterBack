@@ -10,7 +10,6 @@ import com.google.gson.*;
 public class LoginController extends Controller{
 
     public Result LoginPage(){
-
         return ok(views.html.login.apply());
     }
 
