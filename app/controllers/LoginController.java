@@ -8,8 +8,7 @@ import com.google.gson.*;
 
 
 public class LoginController extends Controller{
-
-    public Result LoginPage(){
+    public Result login(){
         return ok(views.html.login.apply());
     }
 
