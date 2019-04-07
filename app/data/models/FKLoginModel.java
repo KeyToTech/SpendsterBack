@@ -1,4 +1,11 @@
 package data.models;
 
-public class FKLoginModel {
+import data.entity.User;
+
+public class FKLoginModel  implements LoginModel{
+
+    @Override
+    public User createUser(User user){
+        return user;
+    }
 }

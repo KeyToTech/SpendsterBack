@@ -8,6 +8,4 @@ public class FKSignUpModel implements  SignUpModel {
     public User createUser(User user) {
         return user;
     }
-
-
 }
