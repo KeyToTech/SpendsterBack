@@ -8,6 +8,6 @@ class SignUpController @Inject()(cc: ControllerComponents, repo: UserRepository)
   extends AbstractController(cc){
 
   def signUp() = Action{ implicit request =>
-    Ok(repo.signUp("em", "pa"))
+    Ok(repo.signUp("em", "pa").toString())
   }
 }
