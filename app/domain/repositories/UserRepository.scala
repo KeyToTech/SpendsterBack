@@ -1,8 +1,10 @@
-package data.repositories
+package domain.repositories
+
+import domain.requestEntities.RUser
 
 
 class UserRepository {
-  def signUp(email: String, password: String): Boolean = {
-    true
+  def signUp(user: RUser): String = {
+    user.username
   }
 }
