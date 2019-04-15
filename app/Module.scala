@@ -1,5 +1,6 @@
 import com.google.inject.AbstractModule
 import java.time.Clock
+import com.google.gson.{Gson, GsonBuilder}
 
 import services.{ApplicationTimer, AtomicCounter, Counter}
 
@@ -16,6 +17,10 @@ import services.{ApplicationTimer, AtomicCounter, Counter}
 class Module extends AbstractModule {
 
   override def configure() = {
+
+    val gson = new GsonBuilder().enableComplexMapKeySerialization().create()
+    bind(classOf[Gson]).toInstance(gson)
+
     // Use the system clock as the default implementation of Clock
     bind(classOf[Clock]).toInstance(Clock.systemDefaultZone)
     // Ask Guice to create an instance of ApplicationTimer when the
