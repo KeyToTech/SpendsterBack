@@ -2,7 +2,6 @@ package controllers
 
 import com.google.gson.Gson
 import domain.repositories.UserRepository
-import domain.requestEntities.RUser
 import javax.inject.Inject
 import play.api.mvc.{AbstractController, ControllerComponents}
 
@@ -10,8 +9,22 @@ class SignUpController @Inject()(cc: ControllerComponents, repo: UserRepository,
   extends AbstractController(cc){
 
   def signUp() = Action{ implicit request =>
-    val json = request.body.asJson.get.toString()
-    val rUser = gson.fromJson(json, classOf[RUser])
-    Ok(repo.signUp(rUser))
+    request.body.asJson.map {json =>
+      (json \ "username").asOpt[String].map{username =>
+        (json \ "email").asOpt[String].map{email =>
+          (json \ "password").asOpt[String].map{password =>
+            Ok(repo.signUp(username, email, password))
+          }.getOrElse {
+            BadRequest("Expecting password")
+          }
+        }.getOrElse{
+          BadRequest("Expecting email")
+        }
+      }.getOrElse {
+        BadRequest("Expecting username")
+      }
+    }.getOrElse{
+      BadRequest("Expecting user data")
+    }
   }
 }
