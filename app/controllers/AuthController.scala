@@ -5,7 +5,7 @@ import domain.repositories.UserRepository
 import javax.inject.Inject
 import play.api.mvc.{AbstractController, ControllerComponents}
 
-class SignUpController @Inject()(cc: ControllerComponents, repo: UserRepository, gson: Gson)
+class AuthController @Inject()(cc: ControllerComponents, repo: UserRepository, gson: Gson)
   extends AbstractController(cc){
 
   def signUp() = Action{ implicit request =>
@@ -13,7 +13,7 @@ class SignUpController @Inject()(cc: ControllerComponents, repo: UserRepository,
       (json \ "username").asOpt[String].map{username =>
         (json \ "email").asOpt[String].map{email =>
           (json \ "password").asOpt[String].map{password =>
-            Ok(repo.signUp(username, email, password))
+            Ok(gson.toJson(repo.signUp(username, email, password)))
           }.getOrElse {
             BadRequest("Expecting password")
           }
@@ -21,6 +21,22 @@ class SignUpController @Inject()(cc: ControllerComponents, repo: UserRepository,
           BadRequest("Expecting email")
         }
       }.getOrElse {
+        BadRequest("Expecting username")
+      }
+    }.getOrElse{
+      BadRequest("Expecting user data")
+    }
+  }
+
+  def login() = Action{ implicit request =>
+    request.body.asJson.map {json =>
+      (json \ "username").asOpt[String].map{username =>
+        (json \ "password").asOpt[String].map{password =>
+          Ok(gson.toJson(repo.login(username, password)))
+        }.getOrElse{
+          BadRequest("Expecting password")
+        }
+      }.getOrElse{
         BadRequest("Expecting username")
       }
     }.getOrElse{
