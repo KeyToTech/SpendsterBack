@@ -13,7 +13,7 @@ class AuthController @Inject()(cc: ControllerComponents, repo: UserRepository, g
       (json \ "username").asOpt[String].map{username =>
         (json \ "email").asOpt[String].map{email =>
           (json \ "password").asOpt[String].map{password =>
-            Ok(repo.signUp(username, email, password).getUsername)
+            Ok(gson.toJson(repo.signUp(username, email, password)))
           }.getOrElse {
             BadRequest("Expecting password")
           }
@@ -32,7 +32,7 @@ class AuthController @Inject()(cc: ControllerComponents, repo: UserRepository, g
     request.body.asJson.map {json =>
       (json \ "username").asOpt[String].map{username =>
         (json \ "password").asOpt[String].map{password =>
-          Ok(repo.login(username, password).getUsername)
+          Ok(gson.toJson(repo.login(username, password)))
         }.getOrElse{
           BadRequest("Expecting password")
         }
