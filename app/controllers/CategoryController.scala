@@ -1,7 +1,8 @@
 package controllers
 
+import java.util.Date
+
 import com.google.gson.Gson
-import domain.entity.Category
 import javax.inject.Inject
 import play.api.mvc.{AbstractController, ControllerComponents}
 
@@ -24,19 +25,55 @@ class CategoryController @Inject()(cc: ControllerComponents,
   }
 
   def update = Action {implicit request =>
-    val json = request.body.asJson.get.toString()
-    val category = gson.fromJson(json, classOf[Category])
-    //Ok(repo.update(category))
-    throw new UnsupportedOperationException()
-    Ok("")
+    request.body.asJson.map {json =>
+      (json \ "id").asOpt[Int].map{id =>
+        (json \ "name").asOpt[String].map{name =>
+          (json \ "type").asOpt[String].map{cType =>
+            (json \ "CreatedDate").asOpt[Date].map{date =>
+              //Ok(repo.update(id, name, cType, date))
+              throw new UnsupportedOperationException()
+              Ok("")
+            }.getOrElse{
+              BadRequest("Expecting date")
+            }
+          }.getOrElse{
+            BadRequest("Expecting type")
+          }
+        }.getOrElse{
+          BadRequest("Expecting name")
+        }
+      }.getOrElse{
+        BadRequest("Expecting id")
+      }
+    }.getOrElse{
+      BadRequest("Expecting category data")
+    }
   }
 
   def save = Action{implicit request =>
-    val json = request.body.asJson.get.toString()
-    val category = gson.fromJson(json, classOf[Category])
-    //Ok(repo.save(category))
-    throw new UnsupportedOperationException()
-    Ok("")
+    request.body.asJson.map {json =>
+      (json \ "id").asOpt[Int].map{id =>
+        (json \ "name").asOpt[String].map{name =>
+          (json \ "type").asOpt[String].map{cType =>
+            (json \ "CreatedDate").asOpt[Date].map{date =>
+              //Ok(repo.save(id, name, cType, date))
+              throw new UnsupportedOperationException()
+              Ok("")
+            }.getOrElse{
+              BadRequest("Expecting date")
+            }
+          }.getOrElse{
+            BadRequest("Expecting type")
+          }
+        }.getOrElse{
+          BadRequest("Expecting name")
+        }
+      }.getOrElse{
+        BadRequest("Expecting id")
+      }
+    }.getOrElse{
+      BadRequest("Expecting category data")
+    }
   }
 
   def delete(id: String) = Action{
