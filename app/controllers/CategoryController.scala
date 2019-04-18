@@ -52,24 +52,20 @@ class CategoryController @Inject()(cc: ControllerComponents,
 
   def save = Action{implicit request =>
     request.body.asJson.map {json =>
-      (json \ "id").asOpt[Int].map{id =>
-        (json \ "name").asOpt[String].map{name =>
-          (json \ "type").asOpt[String].map{cType =>
-            (json \ "CreatedDate").asOpt[Date].map{date =>
-              //Ok(repo.save(id, name, cType, date))
-              throw new UnsupportedOperationException()
-              Ok("")
-            }.getOrElse{
-              BadRequest("Expecting date")
-            }
+      (json \ "name").asOpt[String].map{name =>
+        (json \ "type").asOpt[String].map{cType =>
+          (json \ "CreatedDate").asOpt[Date].map{date =>
+            //Ok(repo.save(name, cType, date))
+            throw new UnsupportedOperationException()
+            Ok("")
           }.getOrElse{
-            BadRequest("Expecting type")
+            BadRequest("Expecting date")
           }
         }.getOrElse{
-          BadRequest("Expecting name")
+          BadRequest("Expecting type")
         }
       }.getOrElse{
-        BadRequest("Expecting id")
+        BadRequest("Expecting name")
       }
     }.getOrElse{
       BadRequest("Expecting category data")
