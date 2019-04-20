@@ -1,10 +1,11 @@
 package controllers
 
-import java.util.Date
+import java.text.{ParseException, SimpleDateFormat}
 
 import domain.entity.Category
 import domain.models.CategoryModel
 import javax.inject.Inject
+import services.ApiJsonMessage
 import play.api.mvc.{AbstractController, ControllerComponents}
 
 
@@ -12,13 +13,15 @@ class CategoryController @Inject()(cc: ControllerComponents,
                                    model: CategoryModel)
   extends AbstractController(cc){
 
+  private val message = new ApiJsonMessage()
+
   def getAll = Action {
     try{
       Ok(model.getAll)
     }
     catch {
       case e: Exception =>
-        InternalServerError(e.getLocalizedMessage)
+        InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
     }
   }
 
@@ -28,7 +31,7 @@ class CategoryController @Inject()(cc: ControllerComponents,
     }
     catch {
       case e: Exception =>
-        InternalServerError(e.getLocalizedMessage)
+        InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
     }
   }
 
@@ -37,34 +40,37 @@ class CategoryController @Inject()(cc: ControllerComponents,
       (json \ "id").asOpt[String].map{id =>
         (json \ "name").asOpt[String].map{name =>
           (json \ "type").asOpt[String].map{cType =>
-            (json \ "CreatedDate").asOpt[Date].map{date =>
+            (json \ "CreatedDate").asOpt[String].map{dateString =>
               try{
                 val obj = new Category
                 obj.setId(id)
                 obj.setName(name)
                 obj.setType(cType)
-                obj.setCreatedDate(date)
+                obj.setCreatedDate(new SimpleDateFormat("dd/mm/yyyy hh:mm").parse(dateString))
 
                 Ok(model.update(obj))
               }
               catch {
+                case e: ParseException =>
+                  BadRequest(message.create(e.getLocalizedMessage.replace("\"", "'") +
+                    " Date format: dd/mm/yyyy hh:mm"))
                 case e: Exception =>
-                  InternalServerError(e.getLocalizedMessage)
+                  InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
               }
             }.getOrElse{
-              BadRequest("Expecting date")
+              BadRequest(message.create("Expecting date"))
             }
           }.getOrElse{
-            BadRequest("Expecting type")
+            BadRequest(message.create("Expecting type"))
           }
         }.getOrElse{
-          BadRequest("Expecting name")
+          BadRequest(message.create("Expecting name"))
         }
       }.getOrElse{
-        BadRequest("Expecting id")
+        BadRequest(message.create("Expecting id"))
       }
     }.getOrElse{
-      BadRequest("Expecting category data")
+      BadRequest(message.create("Expecting category data"))
     }
   }
 
@@ -72,31 +78,25 @@ class CategoryController @Inject()(cc: ControllerComponents,
     request.body.asJson.map {json =>
       (json \ "name").asOpt[String].map{name =>
         (json \ "type").asOpt[String].map{cType =>
-          (json \ "CreatedDate").asOpt[Date].map{date =>
-            try{
-              val obj = new Category
-              obj.setId("")
-              obj.setName(name)
-              obj.setType(cType)
-              obj.setCreatedDate(date)
+          try{
+            val obj = new Category
+            obj.setName(name)
+            obj.setType(cType)
 
-              Ok(model.save(obj))
-            }
-            catch {
-              case e: Exception =>
-                InternalServerError(e.getLocalizedMessage)
-            }
-          }.getOrElse{
-            BadRequest("Expecting date")
+            Created(model.save(obj))
+          }
+          catch {
+            case e: Exception =>
+              InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
           }
         }.getOrElse{
-          BadRequest("Expecting type")
+          BadRequest(message.create("Expecting type"))
         }
       }.getOrElse{
-        BadRequest("Expecting name")
+        BadRequest(message.create("Expecting name"))
       }
     }.getOrElse{
-      BadRequest("Expecting category data")
+      BadRequest(message.create("Expecting category data"))
     }
   }
 
@@ -106,7 +106,7 @@ class CategoryController @Inject()(cc: ControllerComponents,
     }
     catch {
       case e: Exception =>
-        InternalServerError(e.getLocalizedMessage)
+        InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
     }
   }
 }
