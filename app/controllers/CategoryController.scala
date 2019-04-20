@@ -46,7 +46,7 @@ class CategoryController @Inject()(cc: ControllerComponents,
                 obj.setId(id)
                 obj.setName(name)
                 obj.setType(cType)
-                obj.setCreatedDate(new SimpleDateFormat("dd/mm/yyyy hh:mm").parse(dateString))
+                obj.setCreatedDate(new SimpleDateFormat("dd/M/yyyy hh:mm").parse(dateString))
 
                 Ok(model.update(obj))
               }

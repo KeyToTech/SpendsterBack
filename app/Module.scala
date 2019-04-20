@@ -7,7 +7,7 @@ import domain.models._
 import domain.models.impl._
 import domain.repositories._
 import domain.repositories.impl._
-import domain.repositories.mocked.MockedCategoryRepository
+import domain.repositories.mocked._
 import services.{ApplicationTimer, AtomicCounter, Counter}
 
 /**
@@ -41,12 +41,13 @@ class Module extends AbstractModule {
     bind(classOf[Counter]).to(classOf[AtomicCounter])
   }
 
-  private def bindModels: ScopedBindingBuilder = {
+  private def bindModels = {
     bind(classOf[UserModel]).to(classOf[SimpleUserModel])
     bind(classOf[CategoryModel]).to(classOf[SimpleCategoryModel])
+    bind(classOf[ExpensesModel]).to(classOf[SimpleExpensesModel])
   }
 
-  private def bindRepositories: ScopedBindingBuilder = {
+  private def bindRepositories = {
     bind(classOf[UserRepository]).to(classOf[SimpleUserRepository])
   }
 
@@ -56,5 +57,6 @@ class Module extends AbstractModule {
 
   private def bindMockedRepositories = {
     bind(classOf[CategoryRepository]).to(classOf[MockedCategoryRepository])
+    bind(classOf[ExpensesRepository]).to(classOf[MockedExpensesRepository])
   }
 }

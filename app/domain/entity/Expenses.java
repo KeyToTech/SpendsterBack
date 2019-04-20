@@ -4,20 +4,20 @@ import java.util.Date;
 
 public class Expenses {
 
-    private int id;
+    private String id;
     private double amount;
-    private Category category;
+    private String categoryId;
     private Date CreatedDate;
 
     public Expenses(){
         this.amount=0;
     }
 
-    public void setId(int id){
+    public void setId(String id){
         this.id=id;
     }
 
-    public int getId(){
+    public String getId(){
         return this.id;
     }
 
@@ -29,12 +29,12 @@ public class Expenses {
         return this.amount;
     }
 
-    public void setCategory(Category category){
-        this.category=category;
+    public void setCategoryId(String categoryId){
+        this.categoryId=categoryId;
     }
 
-    public Category getCategory(){
-        return this.category;
+    public String getCategoryId(){
+        return this.categoryId;
     }
 
     public void setCreatedDate(Date CreatedDate){
