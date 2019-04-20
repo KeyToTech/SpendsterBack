@@ -2,37 +2,55 @@ package controllers
 
 import java.util.Date
 
-import com.google.gson.Gson
+import domain.entity.Category
+import domain.models.CategoryModel
 import javax.inject.Inject
 import play.api.mvc.{AbstractController, ControllerComponents}
 
 
 class CategoryController @Inject()(cc: ControllerComponents,
-                                   //TODO: add repo here and uncomment returns in methods https://trello.com/c/wWclhRQx/103-add-category-repository
-                                   gson: Gson)
+                                   model: CategoryModel)
   extends AbstractController(cc){
 
   def getAll = Action {
-    //Ok(repo.getAll())
-    throw new UnsupportedOperationException()
-    Ok("")
+    try{
+      Ok(model.getAll)
+    }
+    catch {
+      case e: Exception =>
+        InternalServerError(e.getLocalizedMessage)
+    }
   }
 
   def getOne(id: String) = Action {
-    //Ok(repo.getOne(id))
-    throw new UnsupportedOperationException()
-    Ok("")
+    try{
+      Ok(model.getOne(id))
+    }
+    catch {
+      case e: Exception =>
+        InternalServerError(e.getLocalizedMessage)
+    }
   }
 
   def update = Action {implicit request =>
     request.body.asJson.map {json =>
-      (json \ "id").asOpt[Int].map{id =>
+      (json \ "id").asOpt[String].map{id =>
         (json \ "name").asOpt[String].map{name =>
           (json \ "type").asOpt[String].map{cType =>
             (json \ "CreatedDate").asOpt[Date].map{date =>
-              //Ok(repo.update(id, name, cType, date))
-              throw new UnsupportedOperationException()
-              Ok("")
+              try{
+                val obj = new Category
+                obj.setId(id)
+                obj.setName(name)
+                obj.setType(cType)
+                obj.setCreatedDate(date)
+
+                Ok(model.update(obj))
+              }
+              catch {
+                case e: Exception =>
+                  InternalServerError(e.getLocalizedMessage)
+              }
             }.getOrElse{
               BadRequest("Expecting date")
             }
@@ -55,9 +73,19 @@ class CategoryController @Inject()(cc: ControllerComponents,
       (json \ "name").asOpt[String].map{name =>
         (json \ "type").asOpt[String].map{cType =>
           (json \ "CreatedDate").asOpt[Date].map{date =>
-            //Ok(repo.save(name, cType, date))
-            throw new UnsupportedOperationException()
-            Ok("")
+            try{
+              val obj = new Category
+              obj.setId("")
+              obj.setName(name)
+              obj.setType(cType)
+              obj.setCreatedDate(date)
+
+              Ok(model.save(obj))
+            }
+            catch {
+              case e: Exception =>
+                InternalServerError(e.getLocalizedMessage)
+            }
           }.getOrElse{
             BadRequest("Expecting date")
           }
@@ -73,8 +101,12 @@ class CategoryController @Inject()(cc: ControllerComponents,
   }
 
   def delete(id: String) = Action{
-    //Ok(repo.delete(id))
-    throw new UnsupportedOperationException()
-    Ok("")
+    try{
+      Ok(model.delete(id))
+    }
+    catch {
+      case e: Exception =>
+        InternalServerError(e.getLocalizedMessage)
+    }
   }
 }

@@ -2,5 +2,5 @@ package domain.repositories.base
 
 trait BaseGetOneRepository[T] {
 
-  def getOne: T
+  def getOne(id: String): T
 }

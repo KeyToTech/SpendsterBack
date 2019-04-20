@@ -5,7 +5,9 @@ import domain.models.UserModel
 import domain.repositories.UserRepository
 import javax.inject.Inject
 
-class SimpleUserModel @Inject()(repo: UserRepository, gson: Gson) extends UserModel{
+class SimpleUserModel @Inject()(repo: UserRepository,
+                                gson: Gson)
+  extends UserModel{
 
   override def login(username: String, password: String): String = {
     gson.toJson(repo.login(username, password))

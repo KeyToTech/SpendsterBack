@@ -4,16 +4,16 @@ import  java.util.Date;
 
 public class Category {
 
-    private int id;
+    private String id;
     private String name;
     private String type;
     private Date CreatedDate;
 
-    public void setId(int id){
+    public void setId(String id){
         this.id=id;
     }
 
-    public int getId(){
+    public String getId(){
         return this.id;
     }
 
