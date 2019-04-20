@@ -4,8 +4,8 @@ import domain.entity.User
 import domain.repositories.UserRepository
 
 class SimpleUserRepository extends UserRepository{
-  
-  def login(username: String, password: String): User ={
+
+  override def login(username: String, password: String): User ={
     //TODO: change this to get actual user https://trello.com/c/YH0aogAI/86-create-db-entities
     val user = new User()
     user.setUsername(username)
@@ -13,7 +13,7 @@ class SimpleUserRepository extends UserRepository{
     return user
   }
 
-  def signUp(username: String, email: String, password: String): User = {
+  override def signUp(username: String, email: String, password: String): User = {
     //TODO: change this to save user in db and get actual user https://trello.com/c/YH0aogAI/86-create-db-entities
     val user = new User()
     user.setUsername(username)
