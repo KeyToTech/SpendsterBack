@@ -1,7 +1,9 @@
 import com.google.inject.AbstractModule
 import java.time.Clock
-import com.google.gson.{Gson, GsonBuilder}
 
+import com.google.gson.{Gson, GsonBuilder}
+import domain.repositories.UserRepository
+import domain.repositories.impl.SimpleUserRepository
 import services.{ApplicationTimer, AtomicCounter, Counter}
 
 /**
@@ -20,6 +22,8 @@ class Module extends AbstractModule {
 
     val gson = new GsonBuilder().enableComplexMapKeySerialization().create()
     bind(classOf[Gson]).toInstance(gson)
+
+    bind(classOf[UserRepository]).to(classOf[SimpleUserRepository])
 
     // Use the system clock as the default implementation of Clock
     bind(classOf[Clock]).toInstance(Clock.systemDefaultZone)
