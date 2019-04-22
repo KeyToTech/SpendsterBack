@@ -5,7 +5,7 @@ import domain.models.base._
 
 trait ExpensesModel
   extends BaseGetAllModel
-    with BaseGetOneModel
+    with BaseFindByModel
     with BaseUpdateModel[Expenses]
     with BaseSaveModel[Expenses]
     with BaseDeleteModel{

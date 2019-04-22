@@ -9,22 +9,12 @@ import domain.repositories.ExpensesRepository
 
 class MockedExpensesRepository extends ExpensesRepository{
 
-  override def getOne(id: String): Expenses = {
-    val obj = new Expenses
-    obj.setId(id)
-    obj.setAmount(0.7)
-    obj.setCategoryId(randomUUID().toString)
-    obj.setCreatedDate(new Date())
-
-    obj
+  override def findBy(id: String): Expenses = {
+    new Expenses(id, 0.7, randomUUID().toString, new Date)
   }
 
   override def getAll: util.List[Expenses] = {
-    val obj = new Expenses
-    obj.setId(randomUUID().toString)
-    obj.setAmount(0.7)
-    obj.setCategoryId(randomUUID().toString)
-    obj.setCreatedDate(new Date())
+    val obj = new Expenses(randomUUID().toString, 0.7, randomUUID().toString, new Date)
 
     val list = new util.ArrayList[Expenses]()
     list.add(obj)
@@ -39,18 +29,10 @@ class MockedExpensesRepository extends ExpensesRepository{
   }
 
   override def save(obj: Expenses): Expenses = {
-    obj.setId(randomUUID().toString)
-    obj.setCreatedDate(new Date())
-    obj
+    new Expenses(randomUUID().toString, obj.getAmount, obj.getCategoryId, new Date)
   }
 
   override def delete(id: String): Expenses = {
-    val obj = new Expenses
-    obj.setId(id)
-    obj.setAmount(0.7)
-    obj.setCategoryId(randomUUID().toString)
-    obj.setCreatedDate(new Date())
-
-    obj
+    new Expenses(id, 0.7, randomUUID().toString, new Date)
   }
 }

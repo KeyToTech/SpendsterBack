@@ -1,6 +1,7 @@
 package controllers
 
 import java.text.{ParseException, SimpleDateFormat}
+import java.util.Date
 
 import domain.entity.Expenses
 import domain.models.ExpensesModel
@@ -10,10 +11,9 @@ import services.ApiJsonMessage
 
 
 class ExpensesController @Inject()(cc: ControllerComponents,
-                                   model: ExpensesModel)
+                                   model: ExpensesModel,
+                                   message: ApiJsonMessage)
   extends AbstractController(cc){
-
-  private val message = new ApiJsonMessage()
 
   def getAll = Action {
     try{
@@ -25,9 +25,9 @@ class ExpensesController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def getOne(id: String) = Action {
+  def findBy(id: String) = Action {
     try{
-      Ok(model.getOne(id))
+      Ok(model.findBy(id))
     }
     catch {
       case e: Exception =>
@@ -42,11 +42,7 @@ class ExpensesController @Inject()(cc: ControllerComponents,
           (json \ "categoryId").asOpt[String].map{categoryId =>
             (json \ "CreatedDate").asOpt[String].map{dateString =>
               try{
-                val obj = new Expenses
-                obj.setId(id)
-                obj.setAmount(amount)
-                obj.setCategoryId(categoryId)
-                obj.setCreatedDate(new SimpleDateFormat("dd/M/yyyy hh:mm").parse(dateString))
+                val obj = new Expenses(id, amount, categoryId, new SimpleDateFormat("dd/M/yyyy hh:mm").parse(dateString))
 
                 Ok(model.update(obj))
               }
@@ -79,9 +75,7 @@ class ExpensesController @Inject()(cc: ControllerComponents,
       (json \ "amount").asOpt[Double].map{amount =>
         (json \ "category").asOpt[String].map{categoryId =>
           try{
-            val obj = new Expenses
-            obj.setAmount(amount)
-            obj.setCategoryId(categoryId)
+            val obj = new Expenses(new String, amount, categoryId, new Date)
 
             Created(model.update(obj))
           }
