@@ -76,7 +76,7 @@ class CategoryController @Inject()(cc: ControllerComponents,
       (json \ "name").asOpt[String].map{name =>
         (json \ "type").asOpt[String].map{cType =>
           try{
-            val obj = new Category(new String, name, cType, new Date)
+            val obj = new Category(name, cType)
 
             Created(model.save(obj))
           }

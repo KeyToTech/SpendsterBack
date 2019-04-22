@@ -1,6 +1,6 @@
 package domain.repositories.base
 
-trait BaseDeleteRepository[T] {
+trait BaseDeleteRepository {
 
-  def delete(id: String): T
+  def delete(id: String): Boolean
 }

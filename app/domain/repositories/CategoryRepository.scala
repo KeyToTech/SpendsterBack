@@ -8,6 +8,6 @@ trait CategoryRepository
     with BaseFindByRepository[Category]
     with BaseUpdateRepository[Category]
     with BaseSaveRepository[Category]
-    with BaseDeleteRepository[Category]{
+    with BaseDeleteRepository{
 
 }
