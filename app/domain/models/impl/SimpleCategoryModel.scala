@@ -22,8 +22,8 @@ class SimpleCategoryModel @Inject()(repo: CategoryRepository,
     gson.toJson(repo.save(obj))
   }
 
-  override def getOne(id: String): String = {
-    gson.toJson(repo.getOne(id))
+  override def findBy(id: String): String = {
+    gson.toJson(repo.findBy(id))
   }
 
   override def delete(id: String): String = {

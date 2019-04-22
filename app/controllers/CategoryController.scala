@@ -1,6 +1,7 @@
 package controllers
 
 import java.text.{ParseException, SimpleDateFormat}
+import java.util.Date
 
 import domain.entity.Category
 import domain.models.CategoryModel
@@ -10,10 +11,9 @@ import play.api.mvc.{AbstractController, ControllerComponents}
 
 
 class CategoryController @Inject()(cc: ControllerComponents,
-                                   model: CategoryModel)
+                                   model: CategoryModel,
+                                   message: ApiJsonMessage)
   extends AbstractController(cc){
-
-  private val message = new ApiJsonMessage()
 
   def getAll = Action {
     try{
@@ -27,7 +27,7 @@ class CategoryController @Inject()(cc: ControllerComponents,
 
   def getOne(id: String) = Action {
     try{
-      Ok(model.getOne(id))
+      Ok(model.findBy(id))
     }
     catch {
       case e: Exception =>
@@ -42,11 +42,8 @@ class CategoryController @Inject()(cc: ControllerComponents,
           (json \ "type").asOpt[String].map{cType =>
             (json \ "CreatedDate").asOpt[String].map{dateString =>
               try{
-                val obj = new Category
-                obj.setId(id)
-                obj.setName(name)
-                obj.setType(cType)
-                obj.setCreatedDate(new SimpleDateFormat("dd/mm/yyyy hh:mm").parse(dateString))
+                val obj = new Category(id, name, cType,
+                  new SimpleDateFormat("dd/mm/yyyy hh:mm").parse(dateString))
 
                 Ok(model.update(obj))
               }
@@ -79,9 +76,7 @@ class CategoryController @Inject()(cc: ControllerComponents,
       (json \ "name").asOpt[String].map{name =>
         (json \ "type").asOpt[String].map{cType =>
           try{
-            val obj = new Category
-            obj.setName(name)
-            obj.setType(cType)
+            val obj = new Category(new String, name, cType, new Date)
 
             Created(model.save(obj))
           }

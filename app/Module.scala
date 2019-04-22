@@ -8,7 +8,7 @@ import domain.models.impl._
 import domain.repositories._
 import domain.repositories.impl._
 import domain.repositories.mocked.MockedCategoryRepository
-import services.{ApplicationTimer, AtomicCounter, Counter}
+import services.{ApiJsonMessage, ApplicationTimer, AtomicCounter, Counter}
 
 /**
  * This class is a Guice module that tells Guice how to bind several
@@ -27,10 +27,12 @@ class Module extends AbstractModule {
     val gson = new GsonBuilder().enableComplexMapKeySerialization().create()
     bind(classOf[Gson]).toInstance(gson)
 
+    val message = new ApiJsonMessage
+    bind(classOf[ApiJsonMessage]).toInstance(message)
+
     this.bindRepositories
     this.bindMockedRepositories
     this.bindModels
-    this.bindMockedModels
 
     // Use the system clock as the default implementation of Clock
     bind(classOf[Clock]).toInstance(Clock.systemDefaultZone)
@@ -48,10 +50,6 @@ class Module extends AbstractModule {
 
   private def bindRepositories: ScopedBindingBuilder = {
     bind(classOf[UserRepository]).to(classOf[SimpleUserRepository])
-  }
-
-  private def bindMockedModels = {
-
   }
 
   private def bindMockedRepositories = {
