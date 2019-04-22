@@ -25,7 +25,7 @@ class CategoryController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def getOne(id: String) = Action {
+  def findBy(id: String) = Action {
     try{
       Ok(model.findBy(id))
     }
