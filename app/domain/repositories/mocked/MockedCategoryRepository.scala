@@ -10,27 +10,15 @@ import domain.repositories.CategoryRepository
 class MockedCategoryRepository extends CategoryRepository{
 
   override def save(obj: Category): Category = {
-    obj.setId(randomUUID().toString)
-    obj.setCreatedDate(new Date())
-    obj
+    new Category(randomUUID().toString, obj.getName, obj.getType, new Date)
   }
 
-  override def getOne(id: String): Category = {
-    val obj = new Category
-    obj.setId(id)
-    obj.setName("mockedName")
-    obj.setType("mockedType")
-    obj.setCreatedDate(new Date())
-
-    obj
+  override def findBy(id: String): Category = {
+    new Category(id, "mockedName", "mockedType", new Date())
   }
 
   override def getAll: util.List[Category] = {
-    val obj = new Category
-    obj.setId("mockedId")
-    obj.setName("mockedName")
-    obj.setType("mockedType")
-    obj.setCreatedDate(new Date())
+    val obj = new Category(randomUUID().toString, "mockedName", "mockedType", new Date())
 
     val list = new util.ArrayList[Category]()
     list.add(obj)
@@ -44,11 +32,7 @@ class MockedCategoryRepository extends CategoryRepository{
   }
 
   override def delete(id: String): Category = {
-    val obj = new Category
-    obj.setId(id)
-    obj.setName("mockedName")
-    obj.setType("mockedType")
-    obj.setCreatedDate(new Date())
+    val obj = new Category(id, "mockedName", "mockedType", new Date())
 
     obj
   }
