@@ -1,80 +1,103 @@
 package controllers
 
-import java.util.Date
+import java.text.{ParseException, SimpleDateFormat}
 
-import com.google.gson.Gson
+import domain.entity.Category
+import domain.models.CategoryModel
 import javax.inject.Inject
 import play.api.mvc.{AbstractController, ControllerComponents}
+import services.ApiJsonMessage
 
 
 class CategoryController @Inject()(cc: ControllerComponents,
-                                   //TODO: add repo here and uncomment returns in methods https://trello.com/c/wWclhRQx/103-add-category-repository
-                                   gson: Gson)
+                                   model: CategoryModel,
+                                   message: ApiJsonMessage)
   extends AbstractController(cc){
 
   def getAll = Action {
-    //Ok(repo.getAll())
-    throw new UnsupportedOperationException()
-    Ok("")
+    try{
+      Ok(model.getAll)
+    }
+    catch {
+      case e: Exception =>
+        InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
+    }
   }
 
-  def getOne(id: String) = Action {
-    //Ok(repo.getOne(id))
-    throw new UnsupportedOperationException()
-    Ok("")
+  def findBy(id: String) = Action {
+    try{
+      Ok(model.findBy(id))
+    }
+    catch {
+      case e: Exception =>
+        InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
+    }
   }
 
   def update = Action {implicit request =>
     request.body.asJson.map {json =>
-      (json \ "id").asOpt[Int].map{id =>
+      (json \ "id").asOpt[String].map{id =>
         (json \ "name").asOpt[String].map{name =>
-          (json \ "type").asOpt[String].map{cType =>
-            (json \ "CreatedDate").asOpt[Date].map{date =>
-              //Ok(repo.update(id, name, cType, date))
-              throw new UnsupportedOperationException()
-              Ok("")
+          (json \ "type").asOpt[String].map{categoryType =>
+            (json \ "CreatedDate").asOpt[String].map{dateString =>
+              try{
+                val obj = new Category(id, name, categoryType, new SimpleDateFormat("dd/mm/yyyy hh:mm").parse(dateString))
+                Ok(model.update(obj))
+              }
+              catch {
+                case e: ParseException =>
+                  BadRequest(message.create(e.getLocalizedMessage.replace("\"", "'") +
+                    " Date format: dd/mm/yyyy hh:mm"))
+                case e: Exception =>
+                  InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
+              }
             }.getOrElse{
-              BadRequest("Expecting date")
+              BadRequest(message.create("Expecting date"))
             }
           }.getOrElse{
-            BadRequest("Expecting type")
+            BadRequest(message.create("Expecting type"))
           }
         }.getOrElse{
-          BadRequest("Expecting name")
+          BadRequest(message.create("Expecting name"))
         }
       }.getOrElse{
-        BadRequest("Expecting id")
+        BadRequest(message.create("Expecting id"))
       }
     }.getOrElse{
-      BadRequest("Expecting category data")
+      BadRequest(message.create("Expecting category data"))
     }
   }
 
   def save = Action{implicit request =>
     request.body.asJson.map {json =>
       (json \ "name").asOpt[String].map{name =>
-        (json \ "type").asOpt[String].map{cType =>
-          (json \ "CreatedDate").asOpt[Date].map{date =>
-            //Ok(repo.save(name, cType, date))
-            throw new UnsupportedOperationException()
-            Ok("")
-          }.getOrElse{
-            BadRequest("Expecting date")
+        (json \ "type").asOpt[String].map{categoryType =>
+          try{
+            val obj = new Category(name, categoryType)
+            Created(model.save(obj))
+          }
+          catch {
+            case e: Exception =>
+              InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
           }
         }.getOrElse{
-          BadRequest("Expecting type")
+          BadRequest(message.create("Expecting type"))
         }
       }.getOrElse{
-        BadRequest("Expecting name")
+        BadRequest(message.create("Expecting name"))
       }
     }.getOrElse{
-      BadRequest("Expecting category data")
+      BadRequest(message.create("Expecting category data"))
     }
   }
 
   def delete(id: String) = Action{
-    //Ok(repo.delete(id))
-    throw new UnsupportedOperationException()
-    Ok("")
+    try{
+      Ok(model.delete(id).toString)
+    }
+    catch {
+      case e: Exception =>
+        InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
+    }
   }
 }
