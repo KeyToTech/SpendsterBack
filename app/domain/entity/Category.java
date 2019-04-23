@@ -2,12 +2,18 @@ package domain.entity;
 
 import  java.util.Date;
 
+import static java.util.UUID.randomUUID;
+
 public class Category {
 
     private String id;
     private String name;
     private String type;
     private Date CreatedDate;
+
+    public Category(String name, String type){
+        this(randomUUID().toString(), name, type, new Date());
+    }
 
     public Category(String id, String name, String type, Date CreatedDate){
         this.id = id;

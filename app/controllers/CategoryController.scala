@@ -1,13 +1,12 @@
 package controllers
 
 import java.text.{ParseException, SimpleDateFormat}
-import java.util.Date
 
 import domain.entity.Category
 import domain.models.CategoryModel
 import javax.inject.Inject
-import services.ApiJsonMessage
 import play.api.mvc.{AbstractController, ControllerComponents}
+import services.ApiJsonMessage
 
 
 class CategoryController @Inject()(cc: ControllerComponents,
@@ -39,12 +38,10 @@ class CategoryController @Inject()(cc: ControllerComponents,
     request.body.asJson.map {json =>
       (json \ "id").asOpt[String].map{id =>
         (json \ "name").asOpt[String].map{name =>
-          (json \ "type").asOpt[String].map{cType =>
+          (json \ "type").asOpt[String].map{categoryType =>
             (json \ "CreatedDate").asOpt[String].map{dateString =>
               try{
-                val obj = new Category(id, name, cType,
-                  new SimpleDateFormat("dd/mm/yyyy hh:mm").parse(dateString))
-
+                val obj = new Category(id, name, categoryType, new SimpleDateFormat("dd/mm/yyyy hh:mm").parse(dateString))
                 Ok(model.update(obj))
               }
               catch {
@@ -74,10 +71,9 @@ class CategoryController @Inject()(cc: ControllerComponents,
   def save = Action{implicit request =>
     request.body.asJson.map {json =>
       (json \ "name").asOpt[String].map{name =>
-        (json \ "type").asOpt[String].map{cType =>
+        (json \ "type").asOpt[String].map{categoryType =>
           try{
-            val obj = new Category(new String, name, cType, new Date)
-
+            val obj = new Category(name, categoryType)
             Created(model.save(obj))
           }
           catch {
@@ -97,7 +93,7 @@ class CategoryController @Inject()(cc: ControllerComponents,
 
   def delete(id: String) = Action{
     try{
-      Ok(model.delete(id))
+      Ok(model.delete(id).toString)
     }
     catch {
       case e: Exception =>
