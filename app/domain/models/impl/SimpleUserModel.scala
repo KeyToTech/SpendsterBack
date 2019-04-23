@@ -9,8 +9,8 @@ class SimpleUserModel @Inject()(repo: UserRepository,
                                 gson: Gson)
   extends UserModel{
 
-  override def login(username: String, password: String): String = {
-    gson.toJson(repo.login(username, password))
+  override def login(email: String, password: String): String = {
+    gson.toJson(repo.login(email, password))
   }
 
   override def signUp(username: String, email: String, password: String): String = {
