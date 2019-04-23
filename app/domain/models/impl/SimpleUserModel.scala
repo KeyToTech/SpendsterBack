@@ -1,0 +1,19 @@
+package domain.models.impl
+
+import com.google.gson.Gson
+import domain.models.UserModel
+import domain.repositories.UserRepository
+import javax.inject.Inject
+
+class SimpleUserModel @Inject()(repo: UserRepository,
+                                gson: Gson)
+  extends UserModel{
+
+  override def login(email: String, password: String): String = {
+    gson.toJson(repo.login(email, password))
+  }
+
+  override def signUp(username: String, email: String, password: String): String = {
+    gson.toJson(repo.signUp(username, email, password))
+  }
+}
