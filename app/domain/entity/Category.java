@@ -2,39 +2,36 @@ package domain.entity;
 
 import  java.util.Date;
 
+import static java.util.UUID.randomUUID;
+
 public class Category {
 
-    private int id;
+    private String id;
     private String name;
     private String type;
     private Date CreatedDate;
 
-    public void setId(int id){
-        this.id=id;
+    public Category(String name, String type){
+        this(randomUUID().toString(), name, type, new Date());
     }
 
-    public int getId(){
+    public Category(String id, String name, String type, Date CreatedDate){
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.CreatedDate = CreatedDate;
+    }
+
+    public String getId(){
         return this.id;
-    }
-
-    public void setName(String name){
-        this.name=name;
     }
 
     public String getName(){
         return this.name;
     }
 
-    public void setType(String type){
-        this.type=type;
-    }
-
     public String getType(){
         return this.type;
-    }
-
-    public void setCreatedDate(Date CreatedDate){
-        this.CreatedDate=CreatedDate;
     }
 
     public Date getCreatedDate(){
