@@ -43,7 +43,6 @@ class ExpensesController @Inject()(cc: ControllerComponents,
             (json \ "CreatedDate").asOpt[String].map{dateString =>
               try{
                 val obj = new Expenses(id, amount, categoryId, new SimpleDateFormat("dd/M/yyyy hh:mm").parse(dateString))
-
                 Ok(model.update(obj))
               }
               catch {
@@ -75,8 +74,7 @@ class ExpensesController @Inject()(cc: ControllerComponents,
       (json \ "amount").asOpt[Double].map{amount =>
         (json \ "category").asOpt[String].map{categoryId =>
           try{
-            val obj = new Expenses(new String, amount, categoryId, new Date)
-
+            val obj = new Expenses(amount, categoryId)
             Created(model.update(obj))
           }
           catch {
@@ -96,7 +94,7 @@ class ExpensesController @Inject()(cc: ControllerComponents,
 
   def delete(id: String) = Action {
     try {
-      Ok(model.delete(id))
+      Ok(model.delete(id).toString)
     }
     catch {
       case e: Exception =>

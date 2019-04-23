@@ -32,7 +32,7 @@ class MockedExpensesRepository extends ExpensesRepository{
     new Expenses(randomUUID().toString, obj.getAmount, obj.getCategoryId, new Date)
   }
 
-  override def delete(id: String): Expenses = {
-    new Expenses(id, 0.7, randomUUID().toString, new Date)
+  override def delete(id: String): Boolean = {
+    true
   }
 }

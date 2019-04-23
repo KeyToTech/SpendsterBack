@@ -8,6 +8,6 @@ trait ExpensesRepository
     with BaseFindByRepository[Expenses]
     with BaseUpdateRepository[Expenses]
     with BaseSaveRepository[Expenses]
-    with BaseDeleteRepository[Expenses]{
+    with BaseDeleteRepository{
 
 }
