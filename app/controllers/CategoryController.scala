@@ -93,7 +93,7 @@ class CategoryController @Inject()(cc: ControllerComponents,
 
   def delete(id: String) = Action{
     try{
-      Ok(model.delete(id))
+      Ok(model.delete(id).toString)
     }
     catch {
       case e: Exception =>
