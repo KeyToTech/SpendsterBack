@@ -12,10 +12,7 @@ public class Category {
     private Date CreatedDate;
 
     public Category(String name, String type){
-        this.id = randomUUID().toString();
-        this.name = name;
-        this.type = type;
-        this.CreatedDate = new Date();
+        this(randomUUID().toString(), name, type, new Date());
     }
 
     public Category(String id, String name, String type, Date CreatedDate){
