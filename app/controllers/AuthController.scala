@@ -20,7 +20,7 @@ class AuthController @Inject()(cc: ControllerComponents,
             }
             catch {
               case e: Exception =>
-                InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
+                InternalServerError(message.create(e.getLocalizedMessage))
             }
           }.getOrElse {
             BadRequest(message.create("Expecting password"))
@@ -45,7 +45,7 @@ class AuthController @Inject()(cc: ControllerComponents,
           }
           catch{
             case e: Exception =>
-              InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
+              InternalServerError(message.create(e.getLocalizedMessage))
           }
         }.getOrElse{
           BadRequest(message.create("Expecting password"))

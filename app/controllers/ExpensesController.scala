@@ -20,7 +20,7 @@ class ExpensesController @Inject()(cc: ControllerComponents,
     }
     catch {
       case e: Exception =>
-        InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
+        InternalServerError(message.create(e.getLocalizedMessage))
     }
   }
 
@@ -30,7 +30,7 @@ class ExpensesController @Inject()(cc: ControllerComponents,
     }
     catch {
       case e: Exception =>
-        InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
+        InternalServerError(message.create(e.getLocalizedMessage))
     }
   }
 
@@ -46,10 +46,10 @@ class ExpensesController @Inject()(cc: ControllerComponents,
               }
               catch {
                 case e: ParseException =>
-                  BadRequest(message.create(e.getLocalizedMessage.replace("\"", "'") +
+                  BadRequest(message.create(e.getLocalizedMessage +
                     " Date format: dd/mm/yyyy hh:mm"))
                 case e: Exception =>
-                  InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
+                  InternalServerError(message.create(e.getLocalizedMessage))
               }
             }.getOrElse{
               BadRequest(message.create("Expecting CreatedDate"))
@@ -78,7 +78,7 @@ class ExpensesController @Inject()(cc: ControllerComponents,
           }
           catch {
             case e: Exception =>
-              InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
+              InternalServerError(message.create(e.getLocalizedMessage))
           }
         }.getOrElse{
           BadRequest(message.create("Expecting category id"))
@@ -97,7 +97,7 @@ class ExpensesController @Inject()(cc: ControllerComponents,
     }
     catch {
       case e: Exception =>
-        InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
+        InternalServerError(message.create(e.getLocalizedMessage))
     }
   }
 }
