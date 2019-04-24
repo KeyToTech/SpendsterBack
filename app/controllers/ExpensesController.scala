@@ -71,7 +71,7 @@ class ExpensesController @Inject()(cc: ControllerComponents,
   def save = Action{implicit request =>
     request.body.asJson.map {json =>
       (json \ "amount").asOpt[Double].map{amount =>
-        (json \ "category").asOpt[String].map{categoryId =>
+        (json \ "categoryId").asOpt[String].map{categoryId =>
           try{
             val obj = new Expenses(amount, categoryId)
             Created(model.update(obj))
