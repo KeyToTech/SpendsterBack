@@ -1,12 +1,10 @@
-import com.google.inject.AbstractModule
 import java.time.Clock
 
 import com.google.gson.{Gson, GsonBuilder}
-import com.google.inject.binder.ScopedBindingBuilder
+import com.google.inject.AbstractModule
 import domain.models._
 import domain.models.impl._
 import domain.repositories._
-import domain.repositories.impl._
 import domain.repositories.mocked._
 import services.{ApiJsonMessage, ApplicationTimer, AtomicCounter, Counter}
 
@@ -50,7 +48,7 @@ class Module extends AbstractModule {
   }
 
   private def bindRepositories = {
-    bind(classOf[UserRepository]).to(classOf[SimpleUserRepository])
+    bind(classOf[UserRepository]).to(classOf[MockedUserRepository])
   }
 
   private def bindMockedRepositories = {
