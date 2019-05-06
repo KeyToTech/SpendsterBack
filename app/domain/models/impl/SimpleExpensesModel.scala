@@ -1,7 +1,7 @@
 package domain.models.impl
 
 import com.google.gson.Gson
-import domain.entity.Expenses
+import data.entity.Expenses
 import domain.models.ExpensesModel
 import domain.repositories.ExpensesRepository
 import javax.inject.Inject

@@ -1,6 +1,6 @@
 package domain.models
 
-import domain.entity.Category
+import data.entity.Category
 import domain.models.base._
 
 trait CategoryModel

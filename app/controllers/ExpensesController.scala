@@ -2,7 +2,7 @@ package controllers
 
 import java.text.{ParseException, SimpleDateFormat}
 
-import domain.entity.Expenses
+import data.entity.Expenses
 import domain.models.ExpensesModel
 import javax.inject.Inject
 import play.api.mvc.{AbstractController, ControllerComponents}

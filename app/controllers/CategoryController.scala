@@ -2,7 +2,7 @@ package controllers
 
 import java.text.{ParseException, SimpleDateFormat}
 
-import domain.entity.Category
+import data.entity.Category
 import domain.models.CategoryModel
 import javax.inject.Inject
 import play.api.mvc.{AbstractController, ControllerComponents}

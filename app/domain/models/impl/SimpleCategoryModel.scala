@@ -1,7 +1,7 @@
 package domain.models.impl
 
 import com.google.gson.Gson
-import domain.entity.Category
+import data.entity.Category
 import domain.models.CategoryModel
 import domain.repositories.CategoryRepository
 import javax.inject.Inject

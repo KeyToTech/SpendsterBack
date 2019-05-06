@@ -1,6 +1,6 @@
 package domain.models
 
-import domain.entity.Expenses
+import data.entity.Expenses
 import domain.models.base._
 
 trait ExpensesModel

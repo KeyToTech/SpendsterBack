@@ -1,6 +1,6 @@
 package domain.repositories.mocked
 
-import domain.entity.User
+import data.entity.User
 import domain.repositories.UserRepository
 
 class MockedUserRepository extends UserRepository{

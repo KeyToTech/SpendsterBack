@@ -1,11 +1,18 @@
-package domain.entity;
+package data.entity;
+
+import com.google.gson.annotations.SerializedName;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 
 import  java.util.Date;
 
 import static java.util.UUID.randomUUID;
 
+@Entity("category")
 public class Category {
 
+    @Id
+    @SerializedName("id")
     private String id;
     private String name;
     private String type;

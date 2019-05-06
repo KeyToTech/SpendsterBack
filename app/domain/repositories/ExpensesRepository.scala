@@ -1,6 +1,6 @@
 package domain.repositories
 
-import domain.entity.Expenses
+import data.entity.Expenses
 import domain.repositories.base._
 
 trait ExpensesRepository

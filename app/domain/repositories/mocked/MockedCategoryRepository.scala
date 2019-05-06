@@ -4,7 +4,7 @@ import java.util
 import java.util.Date
 import java.util.UUID.randomUUID
 
-import domain.entity.Category
+import data.entity.Category
 import domain.repositories.CategoryRepository
 
 class MockedCategoryRepository extends CategoryRepository{

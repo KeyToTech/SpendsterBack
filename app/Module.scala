@@ -2,22 +2,26 @@ import java.time.Clock
 
 import com.google.gson.{Gson, GsonBuilder}
 import com.google.inject.AbstractModule
+import data.Connection
+import data.config.StagingConnectionConfig
+import data.store.{MUserStore, UserStore}
 import domain.models._
 import domain.models.impl._
 import domain.repositories._
 import domain.repositories.mocked._
+import domain.repositories.simple.SimpleUserRepository
 import services.{ApiJsonMessage, ApplicationTimer, AtomicCounter, Counter}
 
 /**
- * This class is a Guice module that tells Guice how to bind several
- * different types. This Guice module is created when the Play
- * application starts.
-
- * Play will automatically use any class called `Module` that is in
- * the root package. You can create modules in other locations by
- * adding `play.modules.enabled` settings to the `application.conf`
- * configuration file.
- */
+  * This class is a Guice module that tells Guice how to bind several
+  * different types. This Guice module is created when the Play
+  * application starts.
+  *
+  * Play will automatically use any class called `Module` that is in
+  * the root package. You can create modules in other locations by
+  * adding `play.modules.enabled` settings to the `application.conf`
+  * configuration file.
+  */
 class Module extends AbstractModule {
 
   override def configure(): Unit = {
@@ -28,6 +32,7 @@ class Module extends AbstractModule {
     val message = new ApiJsonMessage
     bind(classOf[ApiJsonMessage]).toInstance(message)
 
+    this.bindStore
     this.bindRepositories
     this.bindMockedRepositories
     this.bindModels
@@ -48,11 +53,15 @@ class Module extends AbstractModule {
   }
 
   private def bindRepositories = {
-    bind(classOf[UserRepository]).to(classOf[MockedUserRepository])
+    bind(classOf[UserRepository]).to(classOf[SimpleUserRepository])
   }
 
   private def bindMockedRepositories = {
     bind(classOf[CategoryRepository]).to(classOf[MockedCategoryRepository])
     bind(classOf[ExpensesRepository]).to(classOf[MockedExpensesRepository])
+  }
+
+  private def bindStore = {
+    bind(classOf[UserStore]).to(classOf[MUserStore])
   }
 }

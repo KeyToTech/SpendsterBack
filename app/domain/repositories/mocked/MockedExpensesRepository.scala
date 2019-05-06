@@ -4,7 +4,7 @@ import java.util
 import java.util.Date
 import java.util.UUID.randomUUID
 
-import domain.entity.Expenses
+import data.entity.Expenses
 import domain.repositories.ExpensesRepository
 
 class MockedExpensesRepository extends ExpensesRepository{

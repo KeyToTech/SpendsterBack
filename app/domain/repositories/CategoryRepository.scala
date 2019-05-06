@@ -1,7 +1,7 @@
 package domain.repositories
 
 import base._
-import domain.entity.Category
+import data.entity.Category
 
 trait CategoryRepository
   extends BaseGetAllRepository[Category]
