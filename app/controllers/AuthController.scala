@@ -16,7 +16,7 @@ class AuthController @Inject()(cc: ControllerComponents,
         (json \ "email").asOpt[String].map{email =>
           (json \ "password").asOpt[String].map{password =>
             try{
-              Ok(model.signUp(username, email, password))
+              Ok(message.token(model.signUp(username, email, password)))
             }
             catch {
               case e: Exception =>
@@ -41,7 +41,7 @@ class AuthController @Inject()(cc: ControllerComponents,
       (json \ "email").asOpt[String].map{email =>
         (json \ "password").asOpt[String].map{password =>
           try{
-            Ok(model.login(email, password))
+            Ok(message.token(model.login(email, password)))
           }
           catch{
             case e: Exception =>
