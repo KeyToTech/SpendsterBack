@@ -20,19 +20,19 @@ class AuthController @Inject()(cc: ControllerComponents,
             }
             catch {
               case e: Exception =>
-                InternalServerError(message.create(e.getLocalizedMessage))
+                InternalServerError(message.error(e.getLocalizedMessage))
             }
           }.getOrElse {
-            BadRequest(message.create("Expecting password"))
+            BadRequest(message.error("Expecting password"))
           }
         }.getOrElse{
-          BadRequest(message.create("Expecting email"))
+          BadRequest(message.error("Expecting email"))
         }
       }.getOrElse {
-        BadRequest(message.create("Expecting username"))
+        BadRequest(message.error("Expecting username"))
       }
     }.getOrElse{
-      BadRequest(message.create("Expecting user data"))
+      BadRequest(message.error("Expecting user data"))
     }
   }
 
@@ -45,16 +45,16 @@ class AuthController @Inject()(cc: ControllerComponents,
           }
           catch{
             case e: Exception =>
-              InternalServerError(message.create(e.getLocalizedMessage))
+              InternalServerError(message.error(e.getLocalizedMessage))
           }
         }.getOrElse{
-          BadRequest(message.create("Expecting password"))
+          BadRequest(message.error("Expecting password"))
         }
       }.getOrElse{
-        BadRequest(message.create("Expecting email"))
+        BadRequest(message.error("Expecting email"))
       }
     }.getOrElse{
-      BadRequest(message.create("Expecting user data"))
+      BadRequest(message.error("Expecting user data"))
     }
   }
 }
