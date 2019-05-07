@@ -14,13 +14,28 @@ class ExpensesController @Inject()(cc: ControllerComponents,
                                    message: ApiJsonMessage)
   extends AbstractController(cc){
 
-  def getAll = Action {
-    try{
-      Ok(model.getAll)
-    }
-    catch {
-      case e: Exception =>
-        InternalServerError(message.create(e.getLocalizedMessage))
+  def getByRange = Action {implicit request =>
+    request.body.asJson.map {json =>
+      (json \ "start").asOpt[String].map{start =>
+        (json \ "end").asOpt[String].map{end =>
+          try{
+            Ok(model.getByRange(new SimpleDateFormat("dd/M/yyyy hh:mm").parse(start), new SimpleDateFormat("dd/M/yyyy hh:mm").parse(end)))
+          }
+          catch {
+            case e: ParseException =>
+              BadRequest(message.create(e.getLocalizedMessage +
+                " Date format: dd/mm/yyyy hh:mm"))
+            case e: Exception =>
+              InternalServerError(message.create(e.getLocalizedMessage))
+          }
+        }.getOrElse{
+          BadRequest(message.create("Expecting end date"))
+        }
+      }.getOrElse{
+        BadRequest(message.create("Expecting start date"))
+      }
+    }.getOrElse{
+      BadRequest(message.create("Expecting start and end dates"))
     }
   }
 
