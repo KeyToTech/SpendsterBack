@@ -23,19 +23,19 @@ class ExpensesController @Inject()(cc: ControllerComponents,
           }
           catch {
             case e: ParseException =>
-              BadRequest(message.create(e.getLocalizedMessage +
+              BadRequest(message.error(e.getLocalizedMessage +
                 " Date format: dd/mm/yyyy hh:mm"))
             case e: Exception =>
-              InternalServerError(message.create(e.getLocalizedMessage))
+              InternalServerError(message.error(e.getLocalizedMessage))
           }
         }.getOrElse{
-          BadRequest(message.create("Expecting end date"))
+          BadRequest(message.error("Expecting end date"))
         }
       }.getOrElse{
-        BadRequest(message.create("Expecting start date"))
+        BadRequest(message.error("Expecting start date"))
       }
     }.getOrElse{
-      BadRequest(message.create("Expecting start and end dates"))
+      BadRequest(message.error("Expecting start and end dates"))
     }
   }
 
@@ -45,7 +45,7 @@ class ExpensesController @Inject()(cc: ControllerComponents,
     }
     catch {
       case e: Exception =>
-        InternalServerError(message.create(e.getLocalizedMessage))
+        InternalServerError(message.error(e.getLocalizedMessage))
     }
   }
 
@@ -61,25 +61,25 @@ class ExpensesController @Inject()(cc: ControllerComponents,
               }
               catch {
                 case e: ParseException =>
-                  BadRequest(message.create(e.getLocalizedMessage +
+                  BadRequest(message.error(e.getLocalizedMessage +
                     " Date format: dd/mm/yyyy hh:mm"))
                 case e: Exception =>
-                  InternalServerError(message.create(e.getLocalizedMessage))
+                  InternalServerError(message.error(e.getLocalizedMessage))
               }
             }.getOrElse{
-              BadRequest(message.create("Expecting CreatedDate"))
+              BadRequest(message.error("Expecting CreatedDate"))
             }
           }.getOrElse{
-            BadRequest(message.create("Expecting categoryId"))
+            BadRequest(message.error("Expecting categoryId"))
           }
         }.getOrElse{
-          BadRequest(message.create("Expecting amount"))
+          BadRequest(message.error("Expecting amount"))
         }
       }.getOrElse{
-        BadRequest(message.create("Expecting id"))
+        BadRequest(message.error("Expecting id"))
       }
     }.getOrElse{
-      BadRequest(message.create("Expecting category data"))
+      BadRequest(message.error("Expecting category data"))
     }
   }
 
@@ -93,26 +93,26 @@ class ExpensesController @Inject()(cc: ControllerComponents,
           }
           catch {
             case e: Exception =>
-              InternalServerError(message.create(e.getLocalizedMessage))
+              InternalServerError(message.error(e.getLocalizedMessage))
           }
         }.getOrElse{
-          BadRequest(message.create("Expecting category id"))
+          BadRequest(message.error("Expecting category id"))
         }
       }.getOrElse{
-        BadRequest(message.create("Expecting amount"))
+        BadRequest(message.error("Expecting amount"))
       }
     }.getOrElse{
-      BadRequest(message.create("Expecting category data"))
+      BadRequest(message.error("Expecting category data"))
     }
   }
 
   def delete(id: String) = Action {
     try {
-      Ok(model.delete(id).toString)
+      Ok(message.success(model.delete(id)))
     }
     catch {
       case e: Exception =>
-        InternalServerError(message.create(e.getLocalizedMessage))
+        InternalServerError(message.error(e.getLocalizedMessage))
     }
   }
 }
