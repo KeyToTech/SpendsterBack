@@ -5,8 +5,9 @@ import play.api.http.HeaderNames
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success, Try}
 
-case class UserRequest[A](token: String, request: Request[A]) extends WrappedRequest[A](request)
+case class UserRequest[A](userId: String, request: Request[A]) extends WrappedRequest[A](request)
 
 class AuthAction @Inject()(bodyParser: BodyParsers.Default)(implicit ec: ExecutionContext)
   extends ActionBuilder[UserRequest, AnyContent]{
@@ -15,13 +16,12 @@ class AuthAction @Inject()(bodyParser: BodyParsers.Default)(implicit ec: Executi
 
   override def invokeBlock[A](request: Request[A], block: UserRequest[A] => Future[Result]): Future[Result] = {
     extractToken(request) map{token =>
-      if(validateToken(token)){
-        block(UserRequest(token, request))
-      }else{
-        Future.successful(Results.Unauthorized("Invalid token"))
+      Try(getUserIdByToken(token)) match {
+        case Success(value) => block(UserRequest(value, request))
+        case Failure(exception) => Future.successful(Results.Unauthorized(exception.getLocalizedMessage))
       }
     } getOrElse{
-      Future.successful(Results.Unauthorized)
+      Future.successful(Results.Unauthorized("Expecting token"))
     }
   }
 
@@ -29,7 +29,11 @@ class AuthAction @Inject()(bodyParser: BodyParsers.Default)(implicit ec: Executi
     request.headers.get(HeaderNames.AUTHORIZATION)
   }
 
-  private def validateToken(token: String): Boolean ={
-    token.length > 1
+  private def getUserIdByToken(token: String): String ={
+    if(token.length > 1){
+      "some-id"
+    }else{
+      throw new Exception("Invalid token")
+    }
   }
 }
