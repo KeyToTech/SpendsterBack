@@ -7,10 +7,9 @@ import play.api.mvc._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
-case class UserRequest[A](userId: String, request: Request[A]) extends WrappedRequest[A](request)
-
 class AuthAction @Inject()(bodyParser: BodyParsers.Default)(implicit ec: ExecutionContext)
   extends ActionBuilder[UserRequest, AnyContent]{
+
   override def parser: BodyParser[AnyContent] = bodyParser
   override protected def executionContext: ExecutionContext = ec
 
