@@ -55,7 +55,7 @@ class ExpensesController @Inject()(cc: ControllerComponents,
         (json \ "amount").asOpt[Double].map{amount =>
           (json \ "note").asOpt[String].map{note =>
             (json \ "categoryId").asOpt[String].map{categoryId =>
-              (json \ "CreatedDate").asOpt[String].map{dateString =>
+              (json \ "сreatedDate").asOpt[String].map{dateString =>
                 try {
                   val obj = new Expenses(id, amount, note, categoryId, new SimpleDateFormat("dd/M/yyyy hh:mm").parse(dateString))
                   Ok(model.update(obj))

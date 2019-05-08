@@ -39,7 +39,7 @@ class CategoryController @Inject()(cc: ControllerComponents,
       (json \ "id").asOpt[String].map{id =>
         (json \ "name").asOpt[String].map{name =>
           (json \ "type").asOpt[String].map{categoryType =>
-            (json \ "CreatedDate").asOpt[String].map{dateString =>
+            (json \ "сreatedDate").asOpt[String].map{dateString =>
               try{
                 val obj = new Category(id, name, categoryType, new SimpleDateFormat("dd/M/yyyy hh:mm").parse(dateString))
                 Ok(model.update(obj))
