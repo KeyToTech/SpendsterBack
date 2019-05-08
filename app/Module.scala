@@ -7,6 +7,7 @@ import domain.models.impl._
 import domain.repositories._
 import domain.repositories.mocked._
 import services._
+import services.auth.BearerTokenGenerator
 
 /**
  * This class is a Guice module that tells Guice how to bind several

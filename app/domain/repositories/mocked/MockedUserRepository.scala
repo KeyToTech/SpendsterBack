@@ -3,7 +3,7 @@ package domain.repositories.mocked
 import domain.entity.User
 import domain.repositories.UserRepository
 import javax.inject.Inject
-import services.BearerTokenGenerator
+import services.auth.BearerTokenGenerator
 
 class MockedUserRepository @Inject()(tokenGenerator: BearerTokenGenerator) extends UserRepository{
   private val TOKEN_EXPIRES_TIME: Long = 7 * 86400000
