@@ -9,17 +9,17 @@ public class Category {
     private String id;
     private String name;
     private String type;
-    private Date CreatedDate;
+    private Date createdDate;
 
     public Category(String name, String type){
         this(randomUUID().toString(), name, type, new Date());
     }
 
-    public Category(String id, String name, String type, Date CreatedDate){
+    public Category(String id, String name, String type, Date createdDate){
         this.id = id;
         this.name = name;
         this.type = type;
-        this.CreatedDate = CreatedDate;
+        this.createdDate = createdDate;
     }
 
     public String getId(){
@@ -35,7 +35,7 @@ public class Category {
     }
 
     public Date getCreatedDate(){
-        return this.CreatedDate;
+        return this.createdDate;
     }
 
 
