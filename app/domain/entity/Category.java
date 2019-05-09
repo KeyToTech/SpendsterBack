@@ -9,22 +9,22 @@ public class Category {
     private String id;
     private String name;
     private String type;
-    private String imgLink;
+    private String icon;
     private Date createdDate;
 
-    public Category(String name, String type, String imgLink){
-        this(randomUUID().toString(), name, type, imgLink, new Date());
+    public Category(String name, String type, String icon){
+        this(randomUUID().toString(), name, type, icon, new Date());
     }
 
     public Category(String id, String name, String type, Date createdDate){
         this(id, name, type, "", createdDate);
     }
 
-    public Category(String id, String name, String type, String imgLink, Date createdDate){
+    public Category(String id, String name, String type, String icon, Date createdDate){
         this.id = id;
         this.name = name;
         this.type = type;
-        this.imgLink = imgLink;
+        this.icon = icon;
         this.createdDate = createdDate;
     }
 
@@ -40,8 +40,8 @@ public class Category {
         return this.type;
     }
 
-    public String getImgLink(){
-        return this.imgLink;
+    public String getIcon(){
+        return this.icon;
     }
 
     public Date getCreatedDate(){

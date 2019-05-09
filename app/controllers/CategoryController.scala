@@ -39,10 +39,10 @@ class CategoryController @Inject()(cc: ControllerComponents,
       (json \ "id").asOpt[String].map{id =>
         (json \ "name").asOpt[String].map{name =>
           (json \ "type").asOpt[String].map{categoryType =>
-            (json \ "imgLink").asOpt[String].map{imgLink =>
+            (json \ "icon").asOpt[String].map{icon =>
               (json \ "createdDate").asOpt[String].map{dateString =>
                 try{
-                  val obj = new Category(id, name, categoryType, imgLink, new SimpleDateFormat("dd/M/yyyy hh:mm").parse(dateString))
+                  val obj = new Category(id, name, categoryType, icon, new SimpleDateFormat("dd/M/yyyy hh:mm").parse(dateString))
                   Ok(model.update(obj))
                 }
                 catch {
@@ -76,9 +76,9 @@ class CategoryController @Inject()(cc: ControllerComponents,
     request.body.asJson.map {json =>
       (json \ "name").asOpt[String].map{name =>
         (json \ "type").asOpt[String].map{categoryType =>
-          (json \ "imgLink").asOpt[String].map{imgLink =>
+          (json \ "icon").asOpt[String].map{icon =>
             try{
-              val obj = new Category(name, categoryType, imgLink)
+              val obj = new Category(name, categoryType, icon)
               Created(model.save(obj))
             }
             catch {
