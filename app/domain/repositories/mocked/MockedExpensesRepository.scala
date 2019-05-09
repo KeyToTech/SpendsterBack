@@ -12,7 +12,7 @@ import scala.util.Random
 class MockedExpensesRepository extends ExpensesRepository{
 
   override def findBy(id: String): Expenses = {
-    new Expenses(id, 0.7, "mockedNote", randomUUID().toString, new Date)
+    new Expenses(id, "mockedUserId", 0.7, "mockedNote", randomUUID().toString, new Date)
   }
 
   override def getByRange(start: Date, end: Date): util.List[Expenses] = {
@@ -23,7 +23,7 @@ class MockedExpensesRepository extends ExpensesRepository{
 
     for(_ <- 0 to 50){
       val date = new Date(start.getTime + randomGenerator.nextInt(dateDiff))
-      val obj = new Expenses(randomUUID().toString, 0.7, "mockedNote", randomUUID().toString, date)
+      val obj = new Expenses(randomUUID().toString, "mockedUserId", 0.7, "mockedNote", randomUUID().toString, date)
       list.add(obj)
     }
 
@@ -35,7 +35,7 @@ class MockedExpensesRepository extends ExpensesRepository{
   }
 
   override def save(obj: Expenses): Expenses = {
-    new Expenses(randomUUID().toString, obj.getAmount, "mockedNote", obj.getCategoryId, new Date)
+    new Expenses(randomUUID().toString, obj.getUserId, obj.getAmount, "mockedNote", obj.getCategoryId, new Date)
   }
 
   override def delete(id: String): Boolean = {

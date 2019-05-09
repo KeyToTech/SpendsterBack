@@ -50,34 +50,38 @@ class ExpensesController @Inject()(cc: ControllerComponents,
   }
 
   def update = Action {implicit request =>
-    request.body.asJson.map {json =>
-      (json \ "id").asOpt[String].map{id =>
-        (json \ "amount").asOpt[Double].map{amount =>
-          (json \ "note").asOpt[String].map{note =>
-            (json \ "categoryId").asOpt[String].map{categoryId =>
-              (json \ "сreatedDate").asOpt[String].map{dateString =>
-                try {
-                  val obj = new Expenses(id, amount, note, categoryId, new SimpleDateFormat("dd/M/yyyy hh:mm").parse(dateString))
-                  Ok(model.update(obj))
-                }
-                catch {
-                  case e: ParseException =>
-                    BadRequest(message.error(e.getLocalizedMessage +
-                      " Date format: dd/mm/yyyy hh:mm"))
-                  case e: Exception =>
-                    InternalServerError(message.error(e.getLocalizedMessage))
+    request.body.asJson.map { json =>
+      (json \ "id").asOpt[String].map { id =>
+        (json \ "userId").asOpt[String].map { userId =>
+          (json \ "amount").asOpt[Double].map { amount =>
+            (json \ "note").asOpt[String].map { note =>
+              (json \ "categoryId").asOpt[String].map { categoryId =>
+                (json \ "сreatedDate").asOpt[String].map { dateString =>
+                  try {
+                    val obj = new Expenses(id, userId, amount, note, categoryId, new SimpleDateFormat("dd/M/yyyy hh:mm").parse(dateString))
+                    Ok(model.update(obj))
+                  }
+                  catch {
+                    case e: ParseException =>
+                      BadRequest(message.error(e.getLocalizedMessage +
+                        " Date format: dd/mm/yyyy hh:mm"))
+                    case e: Exception =>
+                      InternalServerError(message.error(e.getLocalizedMessage))
+                  }
+                }.getOrElse {
+                  BadRequest(message.error("Expecting CreatedDate"))
                 }
               }.getOrElse {
-                BadRequest(message.error("Expecting CreatedDate"))
+                BadRequest(message.error("Expecting categoryId"))
               }
             }.getOrElse {
-              BadRequest(message.error("Expecting categoryId"))
+              BadRequest(message.error("Expecting note"))
             }
           }.getOrElse {
-            BadRequest(message.error("Expecting note"))
+            BadRequest(message.error("Expecting amount"))
           }
-        }.getOrElse{
-          BadRequest(message.error("Expecting amount"))
+        }.getOrElse {
+          BadRequest(message.error("Expecting userId"))
         }
       }.getOrElse{
         BadRequest(message.error("Expecting id"))
@@ -89,25 +93,29 @@ class ExpensesController @Inject()(cc: ControllerComponents,
 
   def save = Action{implicit request =>
     request.body.asJson.map {json =>
-      (json \ "amount").asOpt[Double].map{amount =>
-        (json \ "note").asOpt[String].map{note =>
-          (json \ "categoryId").asOpt[String].map{categoryId =>
-            try {
-              val obj = new Expenses(amount, note, categoryId)
-              Created(model.update(obj))
-            }
-            catch {
-              case e: Exception =>
-                InternalServerError(message.error(e.getLocalizedMessage))
+      (json \ "userId").asOpt[String].map { userId =>
+        (json \ "amount").asOpt[Double].map { amount =>
+          (json \ "note").asOpt[String].map { note =>
+            (json \ "categoryId").asOpt[String].map { categoryId =>
+              try {
+                val obj = new Expenses(userId, amount, note, categoryId)
+                Created(model.update(obj))
+              }
+              catch {
+                case e: Exception =>
+                  InternalServerError(message.error(e.getLocalizedMessage))
+              }
+            }.getOrElse {
+              BadRequest(message.error("Expecting category id"))
             }
           }.getOrElse {
-            BadRequest(message.error("Expecting category id"))
+            BadRequest(message.error("Expecting note"))
           }
         }.getOrElse {
-          BadRequest(message.error("Expecting note"))
+          BadRequest(message.error("Expecting amount"))
         }
-      }.getOrElse{
-        BadRequest(message.error("Expecting amount"))
+      }.getOrElse {
+        BadRequest(message.error("Expecting userId"))
       }
     }.getOrElse{
       BadRequest(message.error("Expecting category data"))
