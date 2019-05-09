@@ -10,22 +10,22 @@ public class Category {
     private String name;
     private String type;
     private String imgLink;
-    private Date CreatedDate;
+    private Date createdDate;
 
     public Category(String name, String type, String imgLink){
         this(randomUUID().toString(), name, type, imgLink, new Date());
     }
 
-    public Category(String id, String name, String type, Date CreatedDate){
-        this(id, name, type, "", CreatedDate);
+    public Category(String id, String name, String type, Date createdDate){
+        this(id, name, type, "", createdDate);
     }
 
-    public Category(String id, String name, String type, String imgLink, Date CreatedDate){
+    public Category(String id, String name, String type, String imgLink, Date createdDate){
         this.id = id;
         this.name = name;
         this.type = type;
         this.imgLink = imgLink;
-        this.CreatedDate = CreatedDate;
+        this.createdDate = createdDate;
     }
 
     public String getId(){
@@ -40,12 +40,12 @@ public class Category {
         return this.type;
     }
 
-    public String getImgLink() {
+    public String getImgLink(){
         return this.imgLink;
     }
 
     public Date getCreatedDate(){
-        return this.CreatedDate;
+        return this.createdDate;
     }
 
 
