@@ -1,8 +1,11 @@
 package services
 
 class ApiJsonMessage {
+  def success(isSuccess: Boolean): String = {
+    "{\"success\": \"" + isSuccess.toString + "\"}"
+  }
 
-  def create(message: String): String = {
+  def error(message: String): String = {
     "{\"error\": \"" + message.replace("\"", "'") + "\"}"
   }
 
