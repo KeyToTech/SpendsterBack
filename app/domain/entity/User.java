@@ -2,63 +2,52 @@ package domain.entity;
 
 import java.util.Date;
 
+import static java.util.UUID.randomUUID;
+
 public class User {
 
-    private int id;
+    private String id;
     private String username;
     private String email;
     private String password;
     private double balance;
     private Date CreatedDate;
 
-
-    public User(){
-        balance=0;
+    public User(String username, String email, String password){
+        this(randomUUID().toString(), username, email, password, 0.0, new Date());
     }
 
-    public void setId(int id){
-        this.id=id;
+    public User(String username, String email, String password, double balance){
+        this(randomUUID().toString(), username, email, password, balance, new Date());
     }
 
-    public  int getId(){
+    public User(String id, String username, String email, String password, double balance, Date CreatedDate) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.balance = balance;
+        this.CreatedDate = CreatedDate;
+    }
+
+    public  String getId(){
         return this.id;
-    }
-
-    public void setUsername(String username){
-        this.username=username;
     }
 
     public  String getUsername(){
         return  this.username;
     }
 
-    public void setPassword(String password){
-        this.password=password;
-    }
-
     public  String getPassword(){
         return  this.password;
-    }
-
-    public  void setBalance(double balance){
-        this.balance=balance;
     }
 
     public  double getBalance(){
         return  this.balance;
     }
 
-    public void setCreatedDate(Date CreatedDate){
-        this.CreatedDate=CreatedDate;
-    }
-
     public  Date getCreatedDate(){
         return this.CreatedDate;
-    }
-
-
-    public void setEmail(String email){
-        this.email=email;
     }
 
     public  String getEmail(){

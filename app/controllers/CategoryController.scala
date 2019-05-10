@@ -20,7 +20,7 @@ class CategoryController @Inject()(cc: ControllerComponents,
     }
     catch {
       case e: Exception =>
-        InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
+        InternalServerError(message.error(e.getLocalizedMessage))
     }
   }
 
@@ -30,7 +30,7 @@ class CategoryController @Inject()(cc: ControllerComponents,
     }
     catch {
       case e: Exception =>
-        InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
+        InternalServerError(message.error(e.getLocalizedMessage))
     }
   }
 
@@ -39,32 +39,36 @@ class CategoryController @Inject()(cc: ControllerComponents,
       (json \ "id").asOpt[String].map{id =>
         (json \ "name").asOpt[String].map{name =>
           (json \ "type").asOpt[String].map{categoryType =>
-            (json \ "CreatedDate").asOpt[String].map{dateString =>
-              try{
-                val obj = new Category(id, name, categoryType, new SimpleDateFormat("dd/mm/yyyy hh:mm").parse(dateString))
-                Ok(model.update(obj))
-              }
-              catch {
-                case e: ParseException =>
-                  BadRequest(message.create(e.getLocalizedMessage.replace("\"", "'") +
-                    " Date format: dd/mm/yyyy hh:mm"))
-                case e: Exception =>
-                  InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
+            (json \ "icon").asOpt[String].map{icon =>
+              (json \ "createdDate").asOpt[String].map{dateString =>
+                try{
+                  val obj = new Category(id, name, categoryType, icon, new SimpleDateFormat("dd/M/yyyy hh:mm").parse(dateString))
+                  Ok(model.update(obj))
+                }
+                catch {
+                  case e: ParseException =>
+                    BadRequest(message.error(e.getLocalizedMessage +
+                      " Date format: dd/mm/yyyy hh:mm"))
+                  case e: Exception =>
+                    InternalServerError(message.error(e.getLocalizedMessage))
+                }
+              }.getOrElse{
+                BadRequest(message.error("Expecting date"))
               }
             }.getOrElse{
-              BadRequest(message.create("Expecting date"))
+              BadRequest(message.error("Expecting imgLink"))
             }
           }.getOrElse{
-            BadRequest(message.create("Expecting type"))
+            BadRequest(message.error("Expecting type"))
           }
         }.getOrElse{
-          BadRequest(message.create("Expecting name"))
+          BadRequest(message.error("Expecting name"))
         }
       }.getOrElse{
-        BadRequest(message.create("Expecting id"))
+        BadRequest(message.error("Expecting id"))
       }
     }.getOrElse{
-      BadRequest(message.create("Expecting category data"))
+      BadRequest(message.error("Expecting category data"))
     }
   }
 
@@ -72,32 +76,36 @@ class CategoryController @Inject()(cc: ControllerComponents,
     request.body.asJson.map {json =>
       (json \ "name").asOpt[String].map{name =>
         (json \ "type").asOpt[String].map{categoryType =>
-          try{
-            val obj = new Category(name, categoryType)
-            Created(model.save(obj))
-          }
-          catch {
-            case e: Exception =>
-              InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
+          (json \ "icon").asOpt[String].map{icon =>
+            try{
+              val obj = new Category(name, categoryType, icon)
+              Created(model.save(obj))
+            }
+            catch {
+              case e: Exception =>
+                InternalServerError(message.error(e.getLocalizedMessage))
+            }
+          }.getOrElse{
+            BadRequest(message.error("Expecting imgLink"))
           }
         }.getOrElse{
-          BadRequest(message.create("Expecting type"))
+          BadRequest(message.error("Expecting type"))
         }
       }.getOrElse{
-        BadRequest(message.create("Expecting name"))
+        BadRequest(message.error("Expecting name"))
       }
     }.getOrElse{
-      BadRequest(message.create("Expecting category data"))
+      BadRequest(message.error("Expecting category data"))
     }
   }
 
   def delete(id: String) = Action{
     try{
-      Ok(model.delete(id).toString)
+      Ok(message.success(model.delete(id)))
     }
     catch {
       case e: Exception =>
-        InternalServerError(message.create(e.getLocalizedMessage.replace("\"", "'")))
+        InternalServerError(message.error(e.getLocalizedMessage))
     }
   }
 }

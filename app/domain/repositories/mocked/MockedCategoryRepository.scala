@@ -18,12 +18,13 @@ class MockedCategoryRepository extends CategoryRepository{
   }
 
   override def getAll: util.List[Category] = {
-    val obj = new Category(randomUUID().toString, "mockedName", "mockedType", new Date())
-
     val list = new util.ArrayList[Category]()
-    list.add(obj)
-    list.add(obj)
-    list.add(obj)
+
+    for(_ <- 0 to 50){
+      val obj = new Category(randomUUID().toString, "mockedName", "mockedType", new Date())
+      list.add(obj)
+    }
+    
     list
   }
 
