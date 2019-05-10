@@ -39,20 +39,24 @@ class CategoryController @Inject()(cc: ControllerComponents,
       (json \ "id").asOpt[String].map{id =>
         (json \ "name").asOpt[String].map{name =>
           (json \ "type").asOpt[String].map{categoryType =>
-            (json \ "сreatedDate").asOpt[String].map{dateString =>
-              try{
-                val obj = new Category(id, name, categoryType, new SimpleDateFormat("dd/M/yyyy hh:mm").parse(dateString))
-                Ok(model.update(obj))
-              }
-              catch {
-                case e: ParseException =>
-                  BadRequest(message.error(e.getLocalizedMessage +
-                    " Date format: dd/mm/yyyy hh:mm"))
-                case e: Exception =>
-                  InternalServerError(message.error(e.getLocalizedMessage))
+            (json \ "icon").asOpt[String].map{icon =>
+              (json \ "createdDate").asOpt[String].map{dateString =>
+                try{
+                  val obj = new Category(id, name, categoryType, icon, new SimpleDateFormat("dd/M/yyyy hh:mm").parse(dateString))
+                  Ok(model.update(obj))
+                }
+                catch {
+                  case e: ParseException =>
+                    BadRequest(message.error(e.getLocalizedMessage +
+                      " Date format: dd/mm/yyyy hh:mm"))
+                  case e: Exception =>
+                    InternalServerError(message.error(e.getLocalizedMessage))
+                }
+              }.getOrElse{
+                BadRequest(message.error("Expecting date"))
               }
             }.getOrElse{
-              BadRequest(message.error("Expecting date"))
+              BadRequest(message.error("Expecting imgLink"))
             }
           }.getOrElse{
             BadRequest(message.error("Expecting type"))
@@ -72,13 +76,17 @@ class CategoryController @Inject()(cc: ControllerComponents,
     request.body.asJson.map {json =>
       (json \ "name").asOpt[String].map{name =>
         (json \ "type").asOpt[String].map{categoryType =>
-          try{
-            val obj = new Category(name, categoryType)
-            Created(model.save(obj))
-          }
-          catch {
-            case e: Exception =>
-              InternalServerError(message.error(e.getLocalizedMessage))
+          (json \ "icon").asOpt[String].map{icon =>
+            try{
+              val obj = new Category(name, categoryType, icon)
+              Created(model.save(obj))
+            }
+            catch {
+              case e: Exception =>
+                InternalServerError(message.error(e.getLocalizedMessage))
+            }
+          }.getOrElse{
+            BadRequest(message.error("Expecting imgLink"))
           }
         }.getOrElse{
           BadRequest(message.error("Expecting type"))
