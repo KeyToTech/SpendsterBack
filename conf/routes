@@ -10,8 +10,8 @@ GET     /count                      controllers.CountController.count
 # An example controller showing how to write asynchronous code
 GET     /message                    controllers.AsyncController.message
 
-GET     /expenses                   controllers.ExpensesController.getAll
-GET     /expenses/:id               controllers.ExpensesController.getOne(id:String)
+GET     /expenses                   controllers.ExpensesController.getByRange
+GET     /expenses/:id               controllers.ExpensesController.findBy(id:String)
 POST    /expenses/update            controllers.ExpensesController.update
 POST    /expenses/save              controllers.ExpensesController.save
 DELETE  /expenses/delete/:id        controllers.ExpensesController.delete(id:String)
