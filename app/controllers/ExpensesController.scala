@@ -7,14 +7,16 @@ import domain.models.ExpensesModel
 import javax.inject.Inject
 import play.api.mvc.{AbstractController, ControllerComponents}
 import services.ApiJsonMessage
+import services.auth.AuthAction
 
 
 class ExpensesController @Inject()(cc: ControllerComponents,
+                                   authAction: AuthAction,
                                    model: ExpensesModel,
                                    message: ApiJsonMessage)
   extends AbstractController(cc){
 
-  def getByRange = Action {implicit request =>
+  def getByRange = authAction {implicit request =>
     request.body.asJson.map {json =>
       (json \ "start").asOpt[String].map{start =>
         (json \ "end").asOpt[String].map{end =>
@@ -39,7 +41,7 @@ class ExpensesController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def findBy(id: String) = Action {
+  def findBy(id: String) = authAction {
     try{
       Ok(model.findBy(id))
     }
@@ -49,7 +51,7 @@ class ExpensesController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def update = Action {implicit request =>
+  def update = authAction {implicit request =>
     request.body.asJson.map { json =>
       (json \ "id").asOpt[String].map { id =>
         (json \ "userId").asOpt[String].map { userId =>
@@ -69,7 +71,7 @@ class ExpensesController @Inject()(cc: ControllerComponents,
                       InternalServerError(message.error(e.getLocalizedMessage))
                   }
                 }.getOrElse {
-                  BadRequest(message.error("Expecting CreatedDate"))
+                  BadRequest(message.error("Expecting createdDate"))
                 }
               }.getOrElse {
                 BadRequest(message.error("Expecting categoryId"))
@@ -91,7 +93,7 @@ class ExpensesController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def save = Action{implicit request =>
+  def save = authAction{implicit request =>
     request.body.asJson.map {json =>
       (json \ "userId").asOpt[String].map { userId =>
         (json \ "amount").asOpt[Double].map { amount =>
@@ -122,7 +124,7 @@ class ExpensesController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def delete(id: String) = Action {
+  def delete(id: String) = authAction {
     try {
       Ok(message.success(model.delete(id)))
     }
