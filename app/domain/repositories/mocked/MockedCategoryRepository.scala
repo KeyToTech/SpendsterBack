@@ -14,14 +14,14 @@ class MockedCategoryRepository extends CategoryRepository{
   }
 
   override def findBy(id: String): Category = {
-    new Category(id, "mockedName", "mockedType", new Date())
+    new Category(id, "mockedUserId", "mockedName", "mockedType", new Date())
   }
 
   override def getAll: util.List[Category] = {
     val list = new util.ArrayList[Category]()
 
     for(_ <- 0 to 50){
-      val obj = new Category(randomUUID().toString, "mockedName", "mockedType", new Date())
+      val obj = new Category(randomUUID().toString, "mockedUserId", "mockedName", "mockedType", new Date())
       list.add(obj)
     }
     

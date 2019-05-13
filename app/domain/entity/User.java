@@ -12,22 +12,26 @@ public class User {
     private String password;
     private double balance;
     private Date CreatedDate;
+    private String token;
+    private Date tokenExpiresDate;
 
-    public User(String username, String email, String password){
-        this(randomUUID().toString(), username, email, password, 0.0, new Date());
+    public User(String username, String email, String password, String token, Long tokenExpiresTime){
+        this(randomUUID().toString(), username, email, password, 0.0, new Date(), token, tokenExpiresTime);
     }
 
-    public User(String username, String email, String password, double balance){
-        this(randomUUID().toString(), username, email, password, balance, new Date());
+    public User(String username, String email, String password, double balance, String token, Long tokenExpiresTime){
+        this(randomUUID().toString(), username, email, password, balance, new Date(), token, tokenExpiresTime);
     }
 
-    public User(String id, String username, String email, String password, double balance, Date CreatedDate) {
+    public User(String id, String username, String email, String password, double balance, Date CreatedDate, String token, Long tokenExpiresTime) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.balance = balance;
         this.CreatedDate = CreatedDate;
+        this.token = token;
+        this.tokenExpiresDate = new Date(System.currentTimeMillis() + tokenExpiresTime);
     }
 
     public  String getId(){
@@ -52,6 +56,14 @@ public class User {
 
     public  String getEmail(){
         return this.email;
+    }
+
+    public String getToken() {
+        return this.token;
+    }
+
+    public Date getTokenExpiresDate() {
+        return this.tokenExpiresDate;
     }
 }
 

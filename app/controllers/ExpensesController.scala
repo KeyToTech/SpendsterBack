@@ -7,14 +7,16 @@ import domain.models.ExpensesModel
 import javax.inject.Inject
 import play.api.mvc.{AbstractController, ControllerComponents}
 import services.ApiJsonMessage
+import services.auth.AuthAction
 
 
 class ExpensesController @Inject()(cc: ControllerComponents,
+                                   authAction: AuthAction,
                                    model: ExpensesModel,
                                    message: ApiJsonMessage)
   extends AbstractController(cc){
 
-  def getByRange = Action {implicit request =>
+  def getByRange = authAction {implicit request =>
     request.body.asJson.map {json =>
       (json \ "start").asOpt[String].map{start =>
         (json \ "end").asOpt[String].map{end =>
@@ -39,7 +41,7 @@ class ExpensesController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def findBy(id: String) = Action {
+  def findBy(id: String) = authAction {
     try{
       Ok(model.findBy(id))
     }
@@ -49,35 +51,39 @@ class ExpensesController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def update = Action {implicit request =>
-    request.body.asJson.map {json =>
-      (json \ "id").asOpt[String].map{id =>
-        (json \ "amount").asOpt[Double].map{amount =>
-          (json \ "note").asOpt[String].map{note =>
-            (json \ "categoryId").asOpt[String].map{categoryId =>
-              (json \ "сreatedDate").asOpt[String].map{dateString =>
-                try {
-                  val obj = new Expenses(id, amount, note, categoryId, new SimpleDateFormat("dd/M/yyyy hh:mm").parse(dateString))
-                  Ok(model.update(obj))
-                }
-                catch {
-                  case e: ParseException =>
-                    BadRequest(message.error(e.getLocalizedMessage +
-                      " Date format: dd/mm/yyyy hh:mm"))
-                  case e: Exception =>
-                    InternalServerError(message.error(e.getLocalizedMessage))
+  def update = authAction {implicit request =>
+    request.body.asJson.map { json =>
+      (json \ "id").asOpt[String].map { id =>
+        (json \ "userId").asOpt[String].map { userId =>
+          (json \ "amount").asOpt[Double].map { amount =>
+            (json \ "note").asOpt[String].map { note =>
+              (json \ "categoryId").asOpt[String].map { categoryId =>
+                (json \ "сreatedDate").asOpt[String].map { dateString =>
+                  try {
+                    val obj = new Expenses(id, userId, amount, note, categoryId, new SimpleDateFormat("dd/M/yyyy hh:mm").parse(dateString))
+                    Ok(model.update(obj))
+                  }
+                  catch {
+                    case e: ParseException =>
+                      BadRequest(message.error(e.getLocalizedMessage +
+                        " Date format: dd/mm/yyyy hh:mm"))
+                    case e: Exception =>
+                      InternalServerError(message.error(e.getLocalizedMessage))
+                  }
+                }.getOrElse {
+                  BadRequest(message.error("Expecting createdDate"))
                 }
               }.getOrElse {
-                BadRequest(message.error("Expecting CreatedDate"))
+                BadRequest(message.error("Expecting categoryId"))
               }
             }.getOrElse {
-              BadRequest(message.error("Expecting categoryId"))
+              BadRequest(message.error("Expecting note"))
             }
           }.getOrElse {
-            BadRequest(message.error("Expecting note"))
+            BadRequest(message.error("Expecting amount"))
           }
-        }.getOrElse{
-          BadRequest(message.error("Expecting amount"))
+        }.getOrElse {
+          BadRequest(message.error("Expecting userId"))
         }
       }.getOrElse{
         BadRequest(message.error("Expecting id"))
@@ -87,34 +93,38 @@ class ExpensesController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def save = Action{implicit request =>
+  def save = authAction{implicit request =>
     request.body.asJson.map {json =>
-      (json \ "amount").asOpt[Double].map{amount =>
-        (json \ "note").asOpt[String].map{note =>
-          (json \ "categoryId").asOpt[String].map{categoryId =>
-            try {
-              val obj = new Expenses(amount, note, categoryId)
-              Created(model.update(obj))
-            }
-            catch {
-              case e: Exception =>
-                InternalServerError(message.error(e.getLocalizedMessage))
+      (json \ "userId").asOpt[String].map { userId =>
+        (json \ "amount").asOpt[Double].map { amount =>
+          (json \ "note").asOpt[String].map { note =>
+            (json \ "categoryId").asOpt[String].map { categoryId =>
+              try {
+                val obj = new Expenses(userId, amount, note, categoryId)
+                Created(model.update(obj))
+              }
+              catch {
+                case e: Exception =>
+                  InternalServerError(message.error(e.getLocalizedMessage))
+              }
+            }.getOrElse {
+              BadRequest(message.error("Expecting category id"))
             }
           }.getOrElse {
-            BadRequest(message.error("Expecting category id"))
+            BadRequest(message.error("Expecting note"))
           }
         }.getOrElse {
-          BadRequest(message.error("Expecting note"))
+          BadRequest(message.error("Expecting amount"))
         }
-      }.getOrElse{
-        BadRequest(message.error("Expecting amount"))
+      }.getOrElse {
+        BadRequest(message.error("Expecting userId"))
       }
     }.getOrElse{
       BadRequest(message.error("Expecting category data"))
     }
   }
 
-  def delete(id: String) = Action {
+  def delete(id: String) = authAction {
     try {
       Ok(message.success(model.delete(id)))
     }
