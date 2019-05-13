@@ -4,13 +4,15 @@ import domain.models.UserModel
 import javax.inject.Inject
 import play.api.mvc.{AbstractController, ControllerComponents}
 import services.ApiJsonMessage
+import services.auth.UnAuthAction
 
 class AuthController @Inject()(cc: ControllerComponents,
+                               unAuthAction: UnAuthAction,
                                model: UserModel,
                                message: ApiJsonMessage)
   extends AbstractController(cc){
 
-  def signUp() = Action{ implicit request =>
+  def signUp() = unAuthAction{ implicit request =>
     request.body.asJson.map {json =>
       (json \ "username").asOpt[String].map{username =>
         (json \ "email").asOpt[String].map{email =>
@@ -36,7 +38,7 @@ class AuthController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def login() = Action{ implicit request =>
+  def login() = unAuthAction{ implicit request =>
     request.body.asJson.map {json =>
       (json \ "email").asOpt[String].map{email =>
         (json \ "password").asOpt[String].map{password =>

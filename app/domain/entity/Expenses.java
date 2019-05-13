@@ -7,17 +7,19 @@ import static java.util.UUID.randomUUID;
 public class Expenses {
 
     private String id;
+    private String userId;
     private double amount;
     private String note;
     private String categoryId;
     private Date createdDate;
 
-    public Expenses(double amount, String note, String categoryId){
-        this(randomUUID().toString(), amount, note, categoryId, new Date());
+    public Expenses(String userId, double amount, String note, String categoryId){
+        this(randomUUID().toString(), userId, amount, note, categoryId, new Date());
     }
 
-    public Expenses(String id, double amount, String note, String categoryId, Date createdDate) {
+    public Expenses(String id, String userId, double amount, String note, String categoryId, Date createdDate) {
         this.id = id;
+        this.userId = userId;
         this.amount = amount;
         this.note = note;
         this.categoryId = categoryId;
@@ -26,6 +28,10 @@ public class Expenses {
 
     public String getId(){
         return this.id;
+    }
+
+    public String getUserId(){
+        return this.userId;
     }
 
     public double getAmount(){
