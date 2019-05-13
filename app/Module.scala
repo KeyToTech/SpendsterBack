@@ -6,7 +6,8 @@ import domain.models._
 import domain.models.impl._
 import domain.repositories._
 import domain.repositories.mocked._
-import services.{ApiJsonMessage, ApplicationTimer, AtomicCounter, Counter}
+import services._
+import services.auth.BearerTokenGenerator
 
 /**
  * This class is a Guice module that tells Guice how to bind several
@@ -27,6 +28,9 @@ class Module extends AbstractModule {
 
     val message = new ApiJsonMessage
     bind(classOf[ApiJsonMessage]).toInstance(message)
+
+    val tokenGenerator = new BearerTokenGenerator
+    bind(classOf[BearerTokenGenerator]).toInstance(tokenGenerator)
 
     this.bindRepositories
     this.bindMockedRepositories
