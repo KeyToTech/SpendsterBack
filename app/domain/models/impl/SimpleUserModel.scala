@@ -23,7 +23,7 @@ class SimpleUserModel @Inject()(repo: UserRepository,
   }
 
   override def signUp(username: String, email: String, password: String): String = {
-    val user = repo.login(email, password)
+    val user = repo.signUp(username, email, password)
     gson.toJson(RUser(user.getId, user.getToken, user.getUsername, user.getEmail, user.getBalance))
   }
 }

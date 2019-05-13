@@ -8,8 +8,4 @@ class ApiJsonMessage {
   def error(message: String): String = {
     "{\"error\": \"" + message.replace("\"", "'") + "\"}"
   }
-
-  def token(token: String): String = {
-    "{\"token\": " + token + "}"
-  }
 }
