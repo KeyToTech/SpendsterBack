@@ -8,12 +8,11 @@ import org.mongodb.morphia.annotations.Property;
 
 import java.util.Date;
 
-import static java.util.UUID.randomUUID;
-
 @Entity("user")
 public class User {
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
+    public static final long TOKEN_EXPIRES_TIME = 7 * 86400000;
 
     @Id
     @SerializedName("id")
@@ -24,22 +23,26 @@ public class User {
     @Property(PASSWORD)
     private String password;
     private double balance;
-    private Date CreatedDate;
+    private Date createdDate;
+    private String token;
+    private Date tokenExpiresDate;
 
     public User() {
     }
 
-    public User(String username, String email, String password) {
-        this(username, email, password, 0.0, new Date());
+    public User(String username, String email, String password, String token) {
+        this(username, email, password, 0.0, new Date(), token);
     }
 
-    public User(String username, String email, String password, double balance, Date CreatedDate) {
+    public User(String username, String email, String password, double balance, Date createdDate, String token) {
         this.id = new ObjectId();
         this.username = username;
         this.email = email;
         this.password = password;
         this.balance = balance;
-        this.CreatedDate = CreatedDate;
+        this.createdDate = createdDate;
+        this.token = token;
+        this.tokenExpiresDate = new Date(System.currentTimeMillis() + TOKEN_EXPIRES_TIME);
     }
 
     public String getId() {
@@ -59,7 +62,15 @@ public class User {
     }
 
     public Date getCreatedDate() {
-        return this.CreatedDate;
+        return this.createdDate;
+    }
+
+    public String getToken() {
+        return this.token;
+    }
+
+    public Date getTokenExpiresDate() {
+        return this.tokenExpiresDate;
     }
 
     public String getEmail() {

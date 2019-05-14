@@ -2,14 +2,13 @@ import java.time.Clock
 
 import com.google.gson.{Gson, GsonBuilder}
 import com.google.inject.AbstractModule
-import data.Connection
-import data.config.StagingConnectionConfig
 import data.store.{MUserStore, UserStore}
 import domain.models._
 import domain.models.impl._
 import domain.repositories._
 import domain.repositories.mocked._
 import domain.repositories.simple.SimpleUserRepository
+import services.auth.BearerTokenGenerator
 import services.{ApiJsonMessage, ApplicationTimer, AtomicCounter, Counter}
 
 /**
@@ -31,6 +30,9 @@ class Module extends AbstractModule {
 
     val message = new ApiJsonMessage
     bind(classOf[ApiJsonMessage]).toInstance(message)
+
+    val tokenGenerator = new BearerTokenGenerator
+    bind(classOf[BearerTokenGenerator]).toInstance(tokenGenerator)
 
     this.bindStore
     this.bindRepositories
