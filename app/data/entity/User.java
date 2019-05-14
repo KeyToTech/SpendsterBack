@@ -45,6 +45,11 @@ public class User {
         this.tokenExpiresDate = new Date(System.currentTimeMillis() + TOKEN_EXPIRES_TIME);
     }
 
+    public void updateToken(String token){
+        this.token = token;
+        this.tokenExpiresDate = new Date(System.currentTimeMillis() + TOKEN_EXPIRES_TIME);
+    }
+
     public String getId() {
         return this.id.toHexString();
     }

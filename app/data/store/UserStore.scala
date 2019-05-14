@@ -19,6 +19,14 @@ trait UserStore {
   def find(email: String, password: String): User
 
   /**
+    * Updates existing user
+    *
+    * @param user To update
+    * @return
+    */
+  def update(user: User): User
+
+  /**
     * Creates a new user
     *
     * @param user To save

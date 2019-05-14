@@ -19,11 +19,17 @@ class SimpleUserModel @Inject()(repo: UserRepository,
 
   override def login(email: String, password: String): String = {
     val user = repo.login(email, password)
+    if (user == null){
+      throw new IllegalArgumentException("There is no such user")
+    }
     gson.toJson(RUser(user.getId, user.getToken, user.getUsername, user.getEmail, user.getBalance))
   }
 
   override def signUp(username: String, email: String, password: String): String = {
     val user = repo.signUp(username, email, password)
+    if (user == null){
+      throw new IllegalArgumentException("User already exists")
+    }
     gson.toJson(RUser(user.getId, user.getToken, user.getUsername, user.getEmail, user.getBalance))
   }
 }

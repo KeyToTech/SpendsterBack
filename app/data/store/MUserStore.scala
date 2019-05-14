@@ -55,4 +55,25 @@ class MUserStore @Inject()(private val storeProvider: StoreProvider) extends Use
     val entityId = new MorphiaDAO[User]().save(this.storeProvider.get(), user).getId
     find(entityId.toString)
   }
+
+  /**
+    * Updates existing user
+    *
+    * @param user To update
+    * @return
+    */
+  override def update(user: User): User = {
+    val query = this.storeProvider.get().find(classOf[User])
+      .field("id").equal(new ObjectId(user.getId))
+    val operations = this.storeProvider.get().createUpdateOperations(classOf[User])
+      .set("username", user.getUsername)
+      .set(User.EMAIL, user.getEmail)
+      .set(User.PASSWORD, user.getPassword)
+      .set("balance", user.getBalance)
+      .set("createdDate", user.getCreatedDate)
+      .set("token", user.getToken)
+      .set("tokenExpiresDate", user.getTokenExpiresDate)
+    this.storeProvider.get().update(query, operations)
+    this.find(user.getId)
+  }
 }
