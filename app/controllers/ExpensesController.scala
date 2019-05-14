@@ -18,26 +18,30 @@ class ExpensesController @Inject()(cc: ControllerComponents,
 
   def getByRange = authAction {implicit request =>
     request.body.asJson.map {json =>
-      (json \ "start").asOpt[String].map{start =>
-        (json \ "end").asOpt[String].map{end =>
-          try{
-            Ok(model.getByRange(new SimpleDateFormat("dd/M/yyyy hh:mm").parse(start), new SimpleDateFormat("dd/M/yyyy hh:mm").parse(end)))
+      (json \ "userId").asOpt[String].map { userId =>
+        (json \ "start").asOpt[String].map { start =>
+          (json \ "end").asOpt[String].map { end =>
+            try {
+              Ok(model.getByRange(userId, new SimpleDateFormat("dd/M/yyyy hh:mm").parse(start), new SimpleDateFormat("dd/M/yyyy hh:mm").parse(end)))
+            }
+            catch {
+              case e: ParseException =>
+                BadRequest(message.error(e.getLocalizedMessage +
+                  " Date format: dd/mm/yyyy hh:mm"))
+              case e: Exception =>
+                InternalServerError(message.error(e.getLocalizedMessage))
+            }
+          }.getOrElse {
+            BadRequest(message.error("Expecting end date"))
           }
-          catch {
-            case e: ParseException =>
-              BadRequest(message.error(e.getLocalizedMessage +
-                " Date format: dd/mm/yyyy hh:mm"))
-            case e: Exception =>
-              InternalServerError(message.error(e.getLocalizedMessage))
-          }
-        }.getOrElse{
-          BadRequest(message.error("Expecting end date"))
+        }.getOrElse {
+          BadRequest(message.error("Expecting start date"))
         }
-      }.getOrElse{
-        BadRequest(message.error("Expecting start date"))
+      }.getOrElse {
+        BadRequest(message.error("Expecting userId"))
       }
     }.getOrElse{
-      BadRequest(message.error("Expecting start and end dates"))
+      BadRequest(message.error("Expecting userId, start and end dates"))
     }
   }
 
@@ -101,7 +105,7 @@ class ExpensesController @Inject()(cc: ControllerComponents,
             (json \ "categoryId").asOpt[String].map { categoryId =>
               try {
                 val obj = new Expenses(userId, amount, note, categoryId)
-                Created(model.update(obj))
+                Created(model.save(obj))
               }
               catch {
                 case e: Exception =>

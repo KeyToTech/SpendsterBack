@@ -1,7 +1,8 @@
-package data.store
+package data.store.MongoStore
 
-import data.{MorphiaDAO, StoreProvider}
 import data.entity.User
+import data.store.UserStore
+import data.{MorphiaDAO, StoreProvider}
 import javax.inject.Inject
 import org.bson.types.ObjectId
 
@@ -18,7 +19,7 @@ class MUserStore @Inject()(private val storeProvider: StoreProvider) extends Use
     * @param userId - id of User
     * @return user entity
     */
-  private def find(userId: String): User = {
+  override def find(userId: String): User = {
     val objectId = new ObjectId(userId)
     this.storeProvider.get().get(classOf[User], objectId)
   }

@@ -10,5 +10,5 @@ trait ExpensesModel
     with BaseSaveModel[Expenses]
     with BaseDeleteModel{
 
-  def getByRange(start: Date, end: Date): String
+  def getByRange(userId: String, start: Date, end: Date): String
 }

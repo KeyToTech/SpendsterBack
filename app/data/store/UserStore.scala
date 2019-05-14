@@ -10,6 +10,14 @@ import data.entity.User
 trait UserStore {
 
   /**
+    * Finds user with id
+    *
+    * @param userId User id
+    * @return User if found
+    */
+  def find(userId: String): User
+
+  /**
     * Finds user with email and password
     *
     * @param email    User email
@@ -22,7 +30,7 @@ trait UserStore {
     * Updates existing user
     *
     * @param user To update
-    * @return
+    * @return     Updated user
     */
   def update(user: User): User
 

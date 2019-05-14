@@ -2,12 +2,13 @@ import java.time.Clock
 
 import com.google.gson.{Gson, GsonBuilder}
 import com.google.inject.AbstractModule
-import data.store.{MUserStore, UserStore}
+import data.store.MongoStore.{MExpensesStore, MUserStore}
+import data.store.{ExpensesStore, UserStore}
 import domain.models._
 import domain.models.impl._
 import domain.repositories._
 import domain.repositories.mocked._
-import domain.repositories.simple.SimpleUserRepository
+import domain.repositories.simple.{SimpleExpensesRepository, SimpleUserRepository}
 import services.auth.BearerTokenGenerator
 import services.{ApiJsonMessage, ApplicationTimer, AtomicCounter, Counter}
 
@@ -56,14 +57,15 @@ class Module extends AbstractModule {
 
   private def bindRepositories = {
     bind(classOf[UserRepository]).to(classOf[SimpleUserRepository])
+    bind(classOf[ExpensesRepository]).to(classOf[SimpleExpensesRepository])
   }
 
   private def bindMockedRepositories = {
     bind(classOf[CategoryRepository]).to(classOf[MockedCategoryRepository])
-    bind(classOf[ExpensesRepository]).to(classOf[MockedExpensesRepository])
   }
 
   private def bindStore = {
     bind(classOf[UserStore]).to(classOf[MUserStore])
+    bind(classOf[ExpensesStore]).to(classOf[MExpensesStore])
   }
 }
