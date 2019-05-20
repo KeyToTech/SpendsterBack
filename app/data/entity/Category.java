@@ -1,35 +1,47 @@
 package data.entity;
 
 import com.google.gson.annotations.SerializedName;
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
-import  java.util.Date;
-
-import static java.util.UUID.randomUUID;
+import java.util.Date;
 
 @Entity("category")
 public class Category {
 
     @Id
     @SerializedName("id")
-    private String id;
+    private ObjectId id;
     private String userId;
     private String name;
     private String type;
     private String icon;
     private Date createdDate;
 
+    public Category(){
+
+    }
+
     public Category(String userId, String name, String type, String icon){
-        this(randomUUID().toString(), userId, name, type, icon, new Date());
+        this(userId, name, type, new Date(), icon);
     }
 
     public Category(String id, String userId, String name, String type, Date createdDate){
         this(id, userId, name, type, "", createdDate);
     }
 
+    public Category(String userId, String name, String type, Date createdDate, String icon){
+        this.id = new ObjectId();
+        this.userId = userId;
+        this.name = name;
+        this.type = type;
+        this.icon = icon;
+        this.createdDate = createdDate;
+    }
+
     public Category(String id, String userId, String name, String type, String icon, Date createdDate){
-        this.id = id;
+        this.id = new ObjectId(id);
         this.userId = userId;
         this.name = name;
         this.type = type;
@@ -38,7 +50,7 @@ public class Category {
     }
 
     public String getId(){
-        return this.id;
+        return this.id.toHexString();
     }
 
     public String getUserId() {

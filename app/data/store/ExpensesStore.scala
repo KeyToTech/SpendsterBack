@@ -47,8 +47,8 @@ trait ExpensesStore {
   /**
     * Deletes existing Expenses
     *
-    * @param expenses  Expenses to delete
-    * @return          Success of operation
+    * @param expensesId Expenses id to delete
+    * @return           Success of operation
     */
   def delete(expensesId: String): Boolean
 }

@@ -16,7 +16,7 @@ POST    /expenses/update            controllers.ExpensesController.update
 POST    /expenses/save              controllers.ExpensesController.save
 DELETE  /expenses/delete/:id        controllers.ExpensesController.delete(id:String)
 
-GET     /categories                 controllers.CategoryController.getAll
+GET     /:userId/categories         controllers.CategoryController.getAll(userId:String)
 GET     /categories/:id             controllers.CategoryController.findBy(id:String)
 POST    /categories/update          controllers.CategoryController.update
 POST    /categories/save            controllers.CategoryController.save

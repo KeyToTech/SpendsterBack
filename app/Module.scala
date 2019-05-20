@@ -2,13 +2,12 @@ import java.time.Clock
 
 import com.google.gson.{Gson, GsonBuilder}
 import com.google.inject.AbstractModule
-import data.store.MongoStore.{MExpensesStore, MUserStore}
-import data.store.{ExpensesStore, UserStore}
+import data.store.MongoStore.{MCategoryStore, MExpensesStore, MUserStore}
+import data.store.{CategoryStore, ExpensesStore, UserStore}
 import domain.models._
 import domain.models.impl._
 import domain.repositories._
-import domain.repositories.mocked._
-import domain.repositories.simple.{SimpleExpensesRepository, SimpleUserRepository}
+import domain.repositories.simple.{SimpleCategoryRepository, SimpleExpensesRepository, SimpleUserRepository}
 import services.auth.BearerTokenGenerator
 import services.{ApiJsonMessage, ApplicationTimer, AtomicCounter, Counter}
 
@@ -37,7 +36,6 @@ class Module extends AbstractModule {
 
     this.bindStore
     this.bindRepositories
-    this.bindMockedRepositories
     this.bindModels
 
     // Use the system clock as the default implementation of Clock
@@ -58,14 +56,13 @@ class Module extends AbstractModule {
   private def bindRepositories = {
     bind(classOf[UserRepository]).to(classOf[SimpleUserRepository])
     bind(classOf[ExpensesRepository]).to(classOf[SimpleExpensesRepository])
-  }
+    bind(classOf[CategoryRepository]).to(classOf[SimpleCategoryRepository])
 
-  private def bindMockedRepositories = {
-    bind(classOf[CategoryRepository]).to(classOf[MockedCategoryRepository])
   }
 
   private def bindStore = {
     bind(classOf[UserStore]).to(classOf[MUserStore])
     bind(classOf[ExpensesStore]).to(classOf[MExpensesStore])
+    bind(classOf[CategoryStore]).to(classOf[MCategoryStore])
   }
 }

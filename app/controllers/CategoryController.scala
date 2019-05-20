@@ -16,9 +16,9 @@ class CategoryController @Inject()(cc: ControllerComponents,
                                    message: ApiJsonMessage)
   extends AbstractController(cc){
 
-  def getAll = authAction {
+  def getAll(userId: String) = authAction {
     try{
-      Ok(model.getAll)
+      Ok(model.getAll(userId))
     }
     catch {
       case e: Exception =>
@@ -93,7 +93,7 @@ class CategoryController @Inject()(cc: ControllerComponents,
                   InternalServerError(message.error(e.getLocalizedMessage))
               }
             }.getOrElse {
-              BadRequest(message.error("Expecting imgLink"))
+              BadRequest(message.error("Expecting icon"))
             }
           }.getOrElse {
             BadRequest(message.error("Expecting type"))
