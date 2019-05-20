@@ -1,6 +1,6 @@
 package controllers
 
-import java.text.{ParseException, SimpleDateFormat}
+import java.util.Date
 
 import data.entity.Expenses
 import domain.models.ExpensesModel
@@ -16,32 +16,13 @@ class ExpensesController @Inject()(cc: ControllerComponents,
                                    message: ApiJsonMessage)
   extends AbstractController(cc){
 
-  def getByRange = authAction {implicit request =>
-    request.body.asJson.map {json =>
-      (json \ "userId").asOpt[String].map { userId =>
-        (json \ "start").asOpt[String].map { start =>
-          (json \ "end").asOpt[String].map { end =>
-            try {
-              Ok(model.getByRange(userId, new SimpleDateFormat("dd/M/yyyy hh:mm").parse(start), new SimpleDateFormat("dd/M/yyyy hh:mm").parse(end)))
-            }
-            catch {
-              case e: ParseException =>
-                BadRequest(message.error(e.getLocalizedMessage +
-                  " Date format: dd/mm/yyyy hh:mm"))
-              case e: Exception =>
-                InternalServerError(message.error(e.getLocalizedMessage))
-            }
-          }.getOrElse {
-            BadRequest(message.error("Expecting end date"))
-          }
-        }.getOrElse {
-          BadRequest(message.error("Expecting start date"))
-        }
-      }.getOrElse {
-        BadRequest(message.error("Expecting userId"))
-      }
-    }.getOrElse{
-      BadRequest(message.error("Expecting userId, start and end dates"))
+  def getByRange(userId: String, startDate: String, endDate: String) = authAction {
+    try {
+      Ok(model.getByRange(userId, new Date(startDate.toLong), new Date(endDate.toLong)))
+    }
+    catch {
+      case e: Exception =>
+        InternalServerError(message.error(e.getLocalizedMessage))
     }
   }
 
@@ -62,15 +43,12 @@ class ExpensesController @Inject()(cc: ControllerComponents,
           (json \ "amount").asOpt[Double].map { amount =>
             (json \ "note").asOpt[String].map { note =>
               (json \ "categoryId").asOpt[String].map { categoryId =>
-                (json \ "createdDate").asOpt[String].map { dateString =>
+                (json \ "createdDate").asOpt[Long].map { dateTimestamp =>
                   try {
-                    val obj = new Expenses(id, userId, amount, note, categoryId, new SimpleDateFormat("dd/M/yyyy hh:mm").parse(dateString))
+                    val obj = new Expenses(id, userId, amount, note, categoryId, new Date(dateTimestamp))
                     Ok(model.update(obj))
                   }
                   catch {
-                    case e: ParseException =>
-                      BadRequest(message.error(e.getLocalizedMessage +
-                        " Date format: dd/mm/yyyy hh:mm"))
                     case e: Exception =>
                       InternalServerError(message.error(e.getLocalizedMessage))
                   }

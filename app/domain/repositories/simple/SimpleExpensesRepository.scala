@@ -16,7 +16,7 @@ class SimpleExpensesRepository @Inject()(private val store: ExpensesStore) exten
   override def delete(id: String): Boolean = {
     val expenses = store.find(id)
     if(expenses == null) {
-      throw new Exception("There is no such object")
+      throw new NoSuchElementException("There is no such object")
     }
     store.delete(id)
   }
@@ -24,7 +24,7 @@ class SimpleExpensesRepository @Inject()(private val store: ExpensesStore) exten
   override def findBy(id: String): Expenses = {
     val expenses = store.find(id)
     if(expenses == null){
-      throw new Exception("There is no such object")
+      throw new NoSuchElementException("There is no such object")
     }else {
       expenses
     }
@@ -33,7 +33,7 @@ class SimpleExpensesRepository @Inject()(private val store: ExpensesStore) exten
   override def update(obj: Expenses): Expenses = {
     val expenses = store.find(obj.getId)
     if(expenses == null){
-      throw new Exception("There is no such object")
+      throw new NoSuchElementException("There is no such object")
     }else {
       store.update(obj)
     }
@@ -42,7 +42,7 @@ class SimpleExpensesRepository @Inject()(private val store: ExpensesStore) exten
   override def save(obj: Expenses): Expenses = {
     val expenses = store.find(obj.getId)
     if(expenses != null){
-      throw new Exception("Object already exists")
+      throw new IllegalArgumentException("Object already exists")
     }else {
       store.save(obj)
     }

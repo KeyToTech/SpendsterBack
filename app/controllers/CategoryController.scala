@@ -1,6 +1,6 @@
 package controllers
 
-import java.text.{ParseException, SimpleDateFormat}
+import java.util.Date
 
 import data.entity.Category
 import domain.models.CategoryModel
@@ -43,15 +43,12 @@ class CategoryController @Inject()(cc: ControllerComponents,
           (json \ "name").asOpt[String].map { name =>
             (json \ "type").asOpt[String].map { categoryType =>
               (json \ "icon").asOpt[String].map { icon =>
-                (json \ "createdDate").asOpt[String].map { dateString =>
+                (json \ "createdDate").asOpt[Long].map { dateTimestamp =>
                   try {
-                    val obj = new Category(id, userId, name, categoryType, icon, new SimpleDateFormat("dd/M/yyyy hh:mm").parse(dateString))
+                    val obj = new Category(id, userId, name, categoryType, icon, new Date(dateTimestamp))
                     Ok(model.update(obj))
                   }
                   catch {
-                    case e: ParseException =>
-                      BadRequest(message.error(e.getLocalizedMessage +
-                        " Date format: dd/mm/yyyy hh:mm"))
                     case e: Exception =>
                       InternalServerError(message.error(e.getLocalizedMessage))
                   }
