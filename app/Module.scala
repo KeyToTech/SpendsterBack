@@ -5,7 +5,7 @@ import com.google.inject.AbstractModule
 import data.store.MongoStore.{MCategoryStore, MExpensesStore, MUserStore}
 import data.store.{CategoryStore, ExpensesStore, UserStore}
 import domain.models._
-import domain.models.impl._
+import domain.models.simple._
 import domain.repositories._
 import domain.repositories.simple.{SimpleCategoryRepository, SimpleExpensesRepository, SimpleUserRepository}
 import services.auth.BearerTokenGenerator

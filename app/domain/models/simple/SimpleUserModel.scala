@@ -1,4 +1,4 @@
-package domain.models.impl
+package domain.models.simple
 
 import com.google.gson.Gson
 import domain.models.UserModel

@@ -9,7 +9,7 @@ import javax.inject.Inject
 import org.bson.types.ObjectId
 
 /**
-  * Mongo ExpensesStore
+  * Mongo CategoryStore
   */
 class MCategoryStore @Inject()(private val storeProvider: StoreProvider) extends CategoryStore{
 
