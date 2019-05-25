@@ -26,7 +26,7 @@ trait ExpensesStore {
     * @param endDate    Date of end
     * @return           List of Expenses
     */
-  def findRange(userId: String, startDate: Date, endDate: Date): util.List[Expenses]
+  def findRange(userId: String, startDate: Date, endDate: Date, offset: Int, limit: Int): util.List[Expenses]
 
   /**
     * Updates existing Expenses

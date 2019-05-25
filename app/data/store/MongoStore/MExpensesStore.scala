@@ -8,6 +8,7 @@ import data.entity.Expenses
 import data.store.ExpensesStore
 import javax.inject.Inject
 import org.bson.types.ObjectId
+import org.mongodb.morphia.query.FindOptions
 
 /**
   * Mongo ExpensesStore
@@ -33,7 +34,7 @@ class MExpensesStore @Inject()(private val storeProvider: StoreProvider) extends
     * @param endDate   Date of end
     * @return List of Expenses
     */
-  override def findRange(userId: String, startDate: Date, endDate: Date): util.List[Expenses] = {
+  override def findRange(userId: String, startDate: Date, endDate: Date, offset: Int, limit: Int): util.List[Expenses] = {
     val query = this.storeProvider.get().find(classOf[Expenses])
     query.and(
       query.criteria(
@@ -46,7 +47,10 @@ class MExpensesStore @Inject()(private val storeProvider: StoreProvider) extends
         "createdDate"
       ).lessThanOrEq(endDate)
     )
-    query.asList()
+    val opt = new FindOptions()
+    opt.limit(limit)
+    opt.skip(offset)
+    query.asList(opt)
   }
 
   /**
