@@ -11,5 +11,5 @@ trait ExpensesRepository
     with BaseSaveRepository[Expenses]
     with BaseDeleteRepository{
 
-  def getByRange(userId: String, start: Date, end: Date): util.List[Expenses]
+  def getByRange(userId: String, start: Date, end: Date, offset: Int, limit: Int): util.List[Expenses]
 }

@@ -9,8 +9,8 @@ import domain.repositories.ExpensesRepository
 import javax.inject.Inject
 
 class SimpleExpensesRepository @Inject()(private val store: ExpensesStore) extends ExpensesRepository{
-  override def getByRange(userId: String, start: Date, end: Date): util.List[Expenses] = {
-    store.findRange(userId, start, end)
+  override def getByRange(userId: String, start: Date, end: Date, offset: Int, limit: Int): util.List[Expenses] = {
+    store.findRange(userId, start, end, offset, limit)
   }
 
   override def delete(id: String): Boolean = {
