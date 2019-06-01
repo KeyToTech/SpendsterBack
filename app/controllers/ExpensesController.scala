@@ -16,9 +16,9 @@ class ExpensesController @Inject()(cc: ControllerComponents,
                                    message: ApiJsonMessage)
   extends AbstractController(cc){
 
-  def getByRange(userId: String, startDate: String, endDate: String) = authAction {
+  def getByRange(userId: String, startDate: String, endDate: String, offset: Int, limit: Int) = authAction {
     try {
-      Ok(model.getByRange(userId, new Date(startDate.toLong), new Date(endDate.toLong)))
+      Ok(model.getByRange(userId, new Date(startDate.toLong), new Date(endDate.toLong), offset, limit))
     }
     catch {
       case e: Exception =>

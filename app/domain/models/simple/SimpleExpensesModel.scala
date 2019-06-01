@@ -14,9 +14,9 @@ class SimpleExpensesModel @Inject()(repo: ExpensesRepository,
                                     gson: Gson)
   extends ExpensesModel{
 
-  override def getByRange(userId: String, start: Date, end: Date): String = {
+  override def getByRange(userId: String, start: Date, end: Date, offset: Int, limit: Int): String = {
     val rExpensesList = new util.ArrayList[RExpenses]
-    repo.getByRange(userId, start, end)
+    repo.getByRange(userId, start, end, offset, limit)
       .forEach(expenses => {
         rExpensesList.add(new RExpenses(expenses))
       })
