@@ -1,9 +1,8 @@
 package domain.repositories
 
+import data.entity.Expenses
 import java.util
 import java.util.Date
-
-import domain.entity.Expenses
 import domain.repositories.base._
 
 trait ExpensesRepository
@@ -12,5 +11,5 @@ trait ExpensesRepository
     with BaseSaveRepository[Expenses]
     with BaseDeleteRepository{
 
-  def getByRange(start: Date, end: Date): util.List[Expenses]
+  def getByRange(userId: String, start: Date, end: Date, offset: Int, limit: Int): util.List[Expenses]
 }

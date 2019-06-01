@@ -1,9 +1,16 @@
-package domain.entity;
+package data.entity;
+
+import com.google.gson.annotations.SerializedName;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 
 import  java.util.Date;
 
+@Entity("income")
 public class Incomes {
 
+    @Id
+    @SerializedName("id")
     private int id;
     private double amount;
     private Category category;

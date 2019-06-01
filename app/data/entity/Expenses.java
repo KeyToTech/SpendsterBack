@@ -1,24 +1,43 @@
-package domain.entity;
+package data.entity;
+
+import com.google.gson.annotations.SerializedName;
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 
 import java.util.Date;
 
-import static java.util.UUID.randomUUID;
-
+@Entity("expense")
 public class Expenses {
 
-    private String id;
+    @Id
+    @SerializedName("id")
+    private ObjectId id;
     private String userId;
     private double amount;
     private String note;
     private String categoryId;
     private Date createdDate;
 
+    public Expenses(){
+
+    }
+
     public Expenses(String userId, double amount, String note, String categoryId){
-        this(randomUUID().toString(), userId, amount, note, categoryId, new Date());
+        this(userId, amount, note, categoryId, new Date());
+    }
+
+    public Expenses(String userId, double amount, String note, String categoryId, Date createdDate) {
+        this.id = new ObjectId();
+        this.userId = userId;
+        this.amount = amount;
+        this.note = note;
+        this.categoryId = categoryId;
+        this.createdDate = createdDate;
     }
 
     public Expenses(String id, String userId, double amount, String note, String categoryId, Date createdDate) {
-        this.id = id;
+        this.id = new ObjectId(id);
         this.userId = userId;
         this.amount = amount;
         this.note = note;
@@ -27,7 +46,7 @@ public class Expenses {
     }
 
     public String getId(){
-        return this.id;
+        return this.id.toHexString();
     }
 
     public String getUserId(){

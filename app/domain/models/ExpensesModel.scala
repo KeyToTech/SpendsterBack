@@ -2,14 +2,9 @@ package domain.models
 
 import java.util.Date
 
-import domain.entity.Expenses
-import domain.models.base._
+import data.entity.Expenses
 
-trait ExpensesModel
-  extends BaseFindByModel
-    with BaseUpdateModel[Expenses]
-    with BaseSaveModel[Expenses]
-    with BaseDeleteModel{
+trait ExpensesModel extends Model[Expenses]{
 
-  def getByRange(start: Date, end: Date): String
+  def getByRange(userId: String, start: Date, end: Date, offset: Int, limit: Int): String
 }

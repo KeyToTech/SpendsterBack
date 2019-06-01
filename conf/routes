@@ -10,13 +10,13 @@ GET     /count                      controllers.CountController.count
 # An example controller showing how to write asynchronous code
 GET     /message                    controllers.AsyncController.message
 
-GET     /expenses                   controllers.ExpensesController.getByRange
+GET     /:userId/expenses/:startDate/:endDate/:offset/:limit   controllers.ExpensesController.getByRange(userId:String, startDate:String, endDate:String, offset:Int, limit:Int)
 GET     /expenses/:id               controllers.ExpensesController.findBy(id:String)
 POST    /expenses/update            controllers.ExpensesController.update
 POST    /expenses/save              controllers.ExpensesController.save
 DELETE  /expenses/delete/:id        controllers.ExpensesController.delete(id:String)
 
-GET     /categories                 controllers.CategoryController.getAll
+GET     /:userId/categories         controllers.CategoryController.getAll(userId:String)
 GET     /categories/:id             controllers.CategoryController.findBy(id:String)
 POST    /categories/update          controllers.CategoryController.update
 POST    /categories/save            controllers.CategoryController.save
