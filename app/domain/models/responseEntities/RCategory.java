@@ -11,6 +11,15 @@ public class RCategory {
     private String icon;
     private long createdDate;
 
+    public RCategory() {
+        this.id = "";
+        this.userId = "";
+        this.name = "";
+        this.categoryType = "";
+        this.icon = "";
+        this.createdDate = 0;
+    }
+
     public RCategory(Category category) {
         this.id = category.getId();
         this.userId = category.getUserId();
